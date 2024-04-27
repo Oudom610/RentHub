@@ -36,3 +36,5 @@ Route::get('/dashboard-home', function () {
 Route::get('/create-tenant', function () {
     return view('dashboard.register-tenant');
 });
+
+//test
