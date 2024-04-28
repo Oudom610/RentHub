@@ -33,7 +33,8 @@ class LandlordLoginController extends Controller
     {
         if (Auth::guard('landlord')->check()) {
             $landlord = Auth::guard('landlord')->user();
-            return view('dashboard.home-dashboard', compact('landlord'));
+            // return view('dashboard.home-dashboard', compact('landlord'));
+            return view('dashboard.home-dashboard', ['landlord' => $landlord]);
         } else {
             // If not authenticated, redirect to landlord login
             return redirect()->route('login-landlord');

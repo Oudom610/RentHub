@@ -1,6 +1,7 @@
 @extends('layout.dashboard-parent')
 
 @section('content')
+
     @parent <!-- Retain master layout content -->
 
     <!-- Main Content Area -->
@@ -10,31 +11,32 @@
             <!-- Form Title -->
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Register New Tenant</h2>
             
-            <form class="w-full max-w-lg" id="registrationForm">
+            <form class="w-full max-w-lg" id="registrationForm" method="POST" action="{{ route('tenant.register.submit') }}">
+                @csrf
                 <div class="flex flex-wrap -mx-3 mb-6">
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                             Name
                         </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="name" type="text">
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="tenant_name" type="text" required>
                     </div>
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                             Email
                         </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="email" type="text">
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="email" type="email" required>
                     </div>
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                             Contact Information
                         </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="phone_number" type="text">
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="contact_info" type="text" required>
                     </div>
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                         <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                             Login Password
                         </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="password" type="password">
+                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="password" type="password" required>
                     </div>
 
                     <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">

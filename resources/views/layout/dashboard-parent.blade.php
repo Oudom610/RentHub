@@ -31,7 +31,7 @@
                         <i class="fas fa-caret-down ml-auto"></i>
                     </a>
                     <ul class="hidden">
-                        <li><a href="/create-tenant" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Register New</a></li>
+                        <li><a href="/tenant/register" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Register New</a></li>
                         <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">List All</a></li>
                     </ul>
                 </li>

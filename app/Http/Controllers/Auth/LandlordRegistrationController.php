@@ -17,10 +17,10 @@ class LandlordRegistrationController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'landlord_name' => 'required|string|max:255|unique:landlords',
-            'email' => 'required|string|email|max:255|unique:landlords',
+            'landlord_name' => 'required|string|max:50|unique:landlords',
+            'email' => 'required|string|email|max:50|unique:landlords',
             'password' => 'required|string|min:5|confirmed',
-            'contact_info' => 'required|string|max:255',
+            'contact_info' => 'required|string|max:50',
         ]);
 
         Landlord::create([
@@ -28,6 +28,7 @@ class LandlordRegistrationController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'contact_info' => $request->contact_info,
+            'profile_picture' => 'default-profile-picture.jpg' 
         ]);
 
         return redirect()->route('login-landlord')->with('success', 'Registration successful. Please log in.');

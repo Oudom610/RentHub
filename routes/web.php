@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LandlordRegistrationController;
+use App\Http\Controllers\TenantController;
 use App\Http\Controllers\Auth\LandlordLoginController;
+use App\Http\Controllers\Auth\LandlordRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,11 +33,12 @@ Route::get('/login-tenant', function () {
 Route::middleware(['landlord.auth'])->group(function () {
     Route::get('/dashboard', [LandlordLoginController::class, 'dashboard'])->name('landlord.dashboard');
     Route::post('/logout-landlord', [LandlordLoginController::class, 'logout'])->name('logout-landlord');
-    Route::get('/create-tenant', function () {
-        return view('dashboard.register-tenant');
-    });
+    // Route::get('/create-tenant', function () {
+    //     return view('dashboard.register-tenant');
+    // });
+    Route::get('/tenant/register', [TenantController::class, 'showRegistrationForm'])->name('tenant.register');
+    Route::post('/tenant/register', [TenantController::class, 'register'])->name('tenant.register.submit');
     
-
     // Add any other landlord-specific routes here
 });
 
