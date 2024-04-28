@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LandlordRegistrationController;
+use App\Http\Controllers\Auth\LandlordLoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,24 +19,34 @@ Route::get('/', function () {
     return view('homepage');
 });
 
-Route::get('/signup', function () {
-    return view('sign-up');
-});
+Route::get('/signup', [LandlordRegistrationController::class, 'showRegistrationForm'])->name('register.landlord');
+Route::post('/signup', [LandlordRegistrationController::class, 'register']);
 
-Route::get('/login-landlord', function () {
-    return view('landlord-login');
-});
+Route::get('/login-landlord', [LandlordLoginController::class, 'showLoginForm'])->name('login-landlord');
+Route::post('/login-landlord', [LandlordLoginController::class, 'login'])->name('login-landlord.post');
 
 Route::get('/login-tenant', function () {
     return view('tenant-login');
 });
 
-Route::get('/dashboard-home', function () {
-    return view('dashboard.home-dashboard');
+Route::middleware(['landlord.auth'])->group(function () {
+    Route::get('/dashboard', [LandlordLoginController::class, 'dashboard'])->name('landlord.dashboard');
+    Route::post('/logout-landlord', [LandlordLoginController::class, 'logout'])->name('logout-landlord');
+    Route::get('/create-tenant', function () {
+        return view('dashboard.register-tenant');
+    });
+    
+
+    // Add any other landlord-specific routes here
 });
 
-Route::get('/create-tenant', function () {
-    return view('dashboard.register-tenant');
-});
+
+// Route::get('/dashboard', function () {
+//     return view('dashboard.home-dashboard');
+// });
+
+// Route::get('/create-tenant', function () {
+//     return view('dashboard.register-tenant');
+// });
 
 //test

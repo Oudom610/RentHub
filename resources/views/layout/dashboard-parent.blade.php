@@ -17,22 +17,26 @@
     <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
         <ul class="flex flex-col pl-0 mb-0">
             <li class="mt-0.5 w-full">
-                <a href="/dashboard-home" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
+                <a href="/dashboard" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
                     <i class="fas fa-chart-pie mr-2 text-xl"></i>
                     <span>Home</span>
                 </a>
             </li>
-            <li class="mt-0.5 w-full">
-                <a class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
-                    <i class="fas fa-users mr-2 text-xl"></i>
-                    <span>Tenant</span>
-                    <i class="fas fa-caret-down ml-auto"></i>
-                </a>
-                <ul class="hidden">
-                    <li><a href="/create-tenant" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Register New</a></li>
-                    <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">List All</a></li>
-                </ul>
-            </li>
+            
+            @if(Auth::guard('landlord')->check())
+                <li class="mt-0.5 w-full">
+                    <a class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
+                        <i class="fas fa-users mr-2 text-xl"></i>
+                        <span>Tenant</span>
+                        <i class="fas fa-caret-down ml-auto"></i>
+                    </a>
+                    <ul class="hidden">
+                        <li><a href="/create-tenant" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Register New</a></li>
+                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">List All</a></li>
+                    </ul>
+                </li>
+            @endif
+
             <li class="mt-0.5 w-full">
                 <a class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
                     <i class="fas fa-table mr-2 text-xl"></i>
@@ -108,23 +112,32 @@
                 </div>
 
                 <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-                    <li class="flex items-center relative">
-                        <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center dropdown-toggle" id="dropdownToggle" onclick="toggleDropdown()">
-                            <img src="profile-picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
-                            <span class="hidden sm:inline">Yurin Zeckar</span>
-                            <i class="fa fa-angle-down ml-2"></i>
-                        </a>
-                        <div id="dropdownMenu" class="absolute right-0 z-10 hidden dropdown-menu" style="top: 100%; left: 0; margin-top: 0.5rem;">
+                    <li class="relative">
+                        <div class="dropdown-toggle">
+                            <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
+                                <img src="profile-picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
+                                <span class="hidden sm:inline">{{ $landlord->landlord_name }}</span>
+                                <i class="fa fa-angle-down ml-2"></i>
+                            </a>
+                        </div>
+                        <div id="dropdownMenu" class="absolute right-0 z-10 hidden dropdown-menu" style="top: 100%; min-width: 120px;"> <!-- Set a min-width here -->
                             <ul class="py-1 bg-white rounded-md shadow-lg">
                                 <li>
-                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue hover:font-bold">
+                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue hover:font-bold">
                                         <i class="fas fa-sign-out-alt mr-2"></i> Logout
                                     </a>
+                                    
+                                    <form id="logout-form" action="{{ route('logout-landlord') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                                 </li>
-                            </ul>
+                            </ul>                            
+
                         </div>
                     </li>
-                </ul>                    
+                </ul>
+                 
+
             </div>
         </div>
     </nav>
