@@ -18,7 +18,8 @@ class EnsureLandlordIsAuthenticated
     {
         if (!Auth::guard('landlord')->check()) {
             // Not authenticated, redirect to landlord login
-            return redirect()->route('login-landlord');
+            // return redirect()->route('login-landlord');
+            return redirect()->route('homepage');
         }
 
         return $next($request);

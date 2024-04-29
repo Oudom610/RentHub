@@ -6,6 +6,7 @@
 
     <!-- Main Content Area -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
+    {{-- <main class="p-4 sm:p-6 lg:p-8"> --}}
         <!-- Form Container -->
         <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 lg:p-8">
             <!-- Form Title -->

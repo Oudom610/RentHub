@@ -18,14 +18,15 @@ use App\Http\Controllers\Auth\LandlordRegistrationController;
 
 Route::get('/', function () {
     return view('homepage');
-});
+})->name('homepage');
 
+// Landlord Signup and Login
 Route::get('/signup', [LandlordRegistrationController::class, 'showRegistrationForm'])->name('register.landlord');
 Route::post('/signup', [LandlordRegistrationController::class, 'register']);
-
 Route::get('/login-landlord', [LandlordLoginController::class, 'showLoginForm'])->name('login-landlord');
 Route::post('/login-landlord', [LandlordLoginController::class, 'login'])->name('login-landlord.post');
 
+// Tenant Login
 Route::get('/login-tenant', function () {
     return view('tenant-login');
 });
@@ -38,8 +39,6 @@ Route::middleware(['landlord.auth'])->group(function () {
     // });
     Route::get('/tenant/register', [TenantController::class, 'showRegistrationForm'])->name('tenant.register');
     Route::post('/tenant/register', [TenantController::class, 'register'])->name('tenant.register.submit');
-    
-    // Add any other landlord-specific routes here
 });
 
 
