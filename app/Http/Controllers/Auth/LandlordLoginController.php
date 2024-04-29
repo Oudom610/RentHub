@@ -21,6 +21,7 @@ class LandlordLoginController extends Controller
         if (Auth::guard('landlord')->attempt($credentials)) {
             // Authentication passed...
             return redirect()->intended(route('landlord.dashboard'));
+            // return redirect()->intended('/dashboard');
         }
 
         return redirect()->back()->withInput($request->only('email'))->withErrors([

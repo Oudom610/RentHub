@@ -16,6 +16,7 @@ class Landlord extends Model implements AuthenticatableContract
         'email',
         'password',
         'contact_info',
+        'profile_picture'
     ];
 
     // Define the method required by the Authenticatable interface

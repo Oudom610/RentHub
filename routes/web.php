@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TenantController;
+use App\Http\Controllers\Auth\TenantController;
+use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
 use App\Http\Controllers\Auth\LandlordRegistrationController;
 
@@ -27,12 +28,13 @@ Route::get('/login-landlord', [LandlordLoginController::class, 'showLoginForm'])
 Route::post('/login-landlord', [LandlordLoginController::class, 'login'])->name('login-landlord.post');
 
 // Tenant Login
-Route::get('/login-tenant', function () {
-    return view('tenant-login');
-});
+Route::get('/login-tenant', [TenantLoginController::class, 'showLoginForm'])->name('login-tenant');
+Route::post('/login-tenant', [TenantLoginController::class, 'login'])->name('login-tenant.post');
 
+
+//Landlord middleware
 Route::middleware(['landlord.auth'])->group(function () {
-    Route::get('/dashboard', [LandlordLoginController::class, 'dashboard'])->name('landlord.dashboard');
+    Route::get('/landlord/dashboard', [LandlordLoginController::class, 'dashboard'])->name('landlord.dashboard');
     Route::post('/logout-landlord', [LandlordLoginController::class, 'logout'])->name('logout-landlord');
     // Route::get('/create-tenant', function () {
     //     return view('dashboard.register-tenant');
@@ -41,13 +43,9 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/tenant/register', [TenantController::class, 'register'])->name('tenant.register.submit');
 });
 
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard.home-dashboard');
-// });
-
-// Route::get('/create-tenant', function () {
-//     return view('dashboard.register-tenant');
-// });
-
-//test
+//Tenant middleware
+Route::middleware(['tenant.auth'])->group(function () {
+    Route::get('/tenant/dashboard', [TenantLoginController::class, 'dashboard'])->name('tenant.dashboard');
+    Route::post('/logout-tenant', [TenantLoginController::class, 'logout'])->name('logout-tenant');
+    // Add other tenant-specific routes here
+});

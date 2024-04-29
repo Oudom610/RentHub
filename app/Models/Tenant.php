@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Auth\Authenticatable;
 
-class Tenant extends Model
+class Tenant extends Model implements AuthenticatableContract
 {
-    use HasFactory;
+    use HasFactory, Authenticatable, Notifiable;
 
     protected $table = 'tenants'; 
 
@@ -15,8 +18,25 @@ class Tenant extends Model
         'landlord_id', 'tenant_name', 'email', 'password', 'contact_info', 'profile_picture'
     ];
 
+    // Define the method required by the Authenticatable interface
+    public function getAuthIdentifierName()
+    {
+        return 'id'; // Assuming 'id' is the primary key of your tenants table
+    }
+
+    public function getAuthIdentifier()
+    {
+        return $this->getKey(); // Return the value of the primary key
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->password; // Assuming 'password' is the hashed password field in your tenants table
+    }
+
     public function landlord()
     {
         return $this->belongsTo('App\Models\Landlord', 'landlord_id');
+        // return $this->belongsTo(Landlord::class);
     }
 }
