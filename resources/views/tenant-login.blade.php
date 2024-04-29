@@ -8,12 +8,23 @@
             <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
                 Login As A Tenant
             </h1>
-            <form class="space-y-4 md:space-y-6" action="{{ route('login-tenant.post') }}" method="POST">     
-                @csrf         
+
+            @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('login-tenant.post') }}">
+                @csrf
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-white">Email</label>
                     <input type="email" name="email" id="email" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" required>
-                </div>   
+                </div>
                 <div>
                     <label for="password" class="block mb-2 text-sm font-medium text-white">Password</label>
                     <input type="password" name="password" id="password" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" required>
@@ -26,6 +37,5 @@
         </div>
     </div>
 </section>
-
 
 @endsection

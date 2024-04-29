@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Tenant;
 
 class TenantLoginController extends Controller
 {
@@ -16,13 +15,11 @@ class TenantLoginController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string'
-        ]);
 
-        if (Auth::guard('tenant')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            // return redirect()->intended(route('tenant.dashboard'));
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('tenant')->attempt($credentials, true)) {
+            // Authentication passed...
             return redirect()->route('tenant.dashboard');
         }
 
@@ -30,25 +27,12 @@ class TenantLoginController extends Controller
             'email' => 'These credentials do not match our records.',
         ]);
 
-        //return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->withInput($request->only('email'));
-
-        // $credentials = $request->only('email', 'password');
-
-        // if (Auth::guard('tenant')->attempt($credentials)) {
-        //     // Authentication passed...
-        //     return redirect()->intended(route('tenant.dashboard'));
-        // }
-
-        // return redirect()->back()->withInput($request->only('email'))->withErrors([
-        //     'email' => 'These credentials do not match our records.',
-        // ]);
     }
 
     public function dashboard()
     {
         if (Auth::guard('tenant')->check()) {
             $tenant = Auth::guard('tenant')->user();
-            // return view('landlord.home-dashboard', compact('landlord'));
             return view('tenant.home-dashboard', ['tenant' => $tenant]);
         } else {
             // If not authenticated, redirect to landlord login

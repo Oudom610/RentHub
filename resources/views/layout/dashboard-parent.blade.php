@@ -17,7 +17,7 @@
     <div class="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
         <ul class="flex flex-col pl-0 mb-0">
             
-            @auth('landlord')
+            {{-- @auth('landlord') --}}
                 <li class="mt-0.5 w-full">
                     <a href="/landlord/dashboard" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
                         <i class="fas fa-chart-pie mr-2 text-xl"></i>
@@ -86,11 +86,11 @@
                         <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
                     </ul>
                 </li>
-            @endauth
+            {{-- @endauth --}}
 
-            @auth('tenant')
+            {{-- @auth('tenant')
                 <li class="mt-0.5 w-full">
-                    <a href="/dashboard" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
+                    <a href="/tenant/dashboard" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">
                         <i class="fas fa-chart-pie mr-2 text-xl"></i>
                         <span>Home</span>
                     </a>
@@ -142,7 +142,7 @@
                         <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
                     </ul>
                 </li>
-            @endauth
+            @endauth --}}
 
         </ul>
     </div>
@@ -172,7 +172,7 @@
                 </div>
 
                 <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-                    {{-- <li class="relative">
+                    <li class="relative">
                         <div class="dropdown-toggle">
                             <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
                                 <img src="profile-picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
@@ -194,8 +194,8 @@
                             </ul>                            
 
                         </div>
-                    </li> --}}
-                    @if(Auth::guard('landlord')->check() || Auth::guard('tenant')->check())
+                    </li>
+                    {{-- @if(Auth::guard('landlord')->check() || Auth::guard('tenant')->check())
                     <li class="relative">
                         <div class="dropdown-toggle">
                             <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
@@ -219,7 +219,7 @@
                             </ul>
                         </div>
                     </li>
-                    @endif
+                    @endif --}}
                 </ul>
                  
             </div>
