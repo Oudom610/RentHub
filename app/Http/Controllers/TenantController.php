@@ -12,7 +12,7 @@ class TenantController extends Controller
     public function showRegistrationForm()
     {
         $landlord = Auth::guard('landlord')->user();
-        return view('dashboard.register-tenant', compact('landlord'));
+        return view('landlord.register-tenant', compact('landlord'));
     }
 
     public function register(Request $request)
