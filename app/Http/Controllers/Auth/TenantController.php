@@ -63,10 +63,17 @@ class TenantController extends Controller
         ]);
     }
 
+    //middleware
+    // public function dashboard(Request $request)
+    // {
+    //     $tenant = Auth::guard('tenants')->user();
+    //     // Now you can use the $tenant variable in your view or perform any necessary operations
+    //     return view('tenant.home-dashboard', compact('tenant'));
+    // }
+
     public function dashboard(Request $request)
     {
         $tenant = $request->session()->get('tenant');
-        // Now you can use the $tenant variable in your view or perform any necessary operations
         return view('tenant.home-dashboard', compact('tenant'));
     }
 
