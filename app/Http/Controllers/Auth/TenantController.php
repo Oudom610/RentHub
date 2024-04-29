@@ -38,4 +38,55 @@ class TenantController extends Controller
 
         return redirect('/landlord/dashboard')->with('success', 'Tenant registered successfully!');
     }
+
+    public function showLoginForm()
+    {
+        return view('tenant-login');
+    }
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string'
+        ]);
+
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::guard('tenants')->attempt($credentials)) {
+            $tenant = Auth::guard('tenants')->user();
+            return redirect()->intended(route('tenant.dashboard'))->with('tenant', $tenant);
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
+    }
+
+    public function dashboard(Request $request)
+    {
+        $tenant = $request->session()->get('tenant');
+        // Now you can use the $tenant variable in your view or perform any necessary operations
+        return view('tenant.home-dashboard', compact('tenant'));
+    }
+
+    public function logout()
+    {
+        Auth::guard('tenants')->logout();
+
+        // Optionally, you can invalidate the user session to regenerate the session ID
+        request()->session()->invalidate();
+
+        // Optionally, regenerate a new session ID for added security
+        request()->session()->regenerateToken();
+
+        return redirect('/'); // Redirect to the homepage or login page
+    }
+
 }
+
+
+// if (Auth::guard('tenants')->attempt($credentials)) {
+//     // return redirect()->intended('/tenant/dashboard');
+//     return redirect()->intended(route('tenant.dashboard'));
+// }

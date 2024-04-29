@@ -66,7 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'landlord.auth' => \App\Http\Middleware\EnsureLandlordIsAuthenticated::class,
-        'tenant.auth' => \App\Http\Middleware\EnsureTenantIsAuthenticated::class,
+        'tenant.auth' => \App\Http\Middleware\TenantAuthMiddleware::class,
     ];
 
 }

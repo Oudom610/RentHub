@@ -19,7 +19,7 @@
             </div>
             @endif
 
-            <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('login-tenant.post') }}">
+            <form class="space-y-4 md:space-y-6" method="POST" action="{{ route('tenant.login.post') }}">
                 @csrf
                 <div>
                     <label for="email" class="block mb-2 text-sm font-medium text-white">Email</label>

@@ -1,4 +1,4 @@
-@extends('layout.dashboard-parent')
+@extends('layout.dashboard-parent-tenant')
 
 @section('content')
     @parent <!-- Retain master layout content -->

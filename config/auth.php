@@ -46,7 +46,7 @@ return [
             'provider' => 'landlords',
         ],
 
-        'tenant' => [
+        'tenants' => [
             'driver' => 'session',
             'provider' => 'tenants',
         ],

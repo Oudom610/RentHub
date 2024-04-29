@@ -22,8 +22,24 @@ Route::get('/', function () {
 })->name('homepage');
 
 // Tenant Login
-Route::get('/login-tenant', [TenantLoginController::class, 'showLoginForm'])->name('login-tenant');
-Route::post('/login-tenant', [TenantLoginController::class, 'login'])->name('login-tenant.post');
+// Route::get('/login-tenant', [TenantLoginController::class, 'showLoginForm'])->name('login-tenant');
+// Route::post('/login-tenant', [TenantLoginController::class, 'login'])->name('login-tenant.post');
+
+// Route::get('/login-tenant', function () {
+//     return view('tenant-login');
+// });
+
+// Tenant Login
+Route::get('/login-tenant', [TenantController::class, 'showLoginForm'])->name('login-tenant');
+Route::post('/login-tenant', [TenantController::class, 'login'])->name('tenant.login.post');
+
+
+// Route::get('/tenant/dashboard', function () {
+//     return view('tenant.home-dashboard');
+// })->name('tenant.dashboard');
+Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
+Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
+
 
 // Landlord Signup and Login
 Route::get('/signup', [LandlordRegistrationController::class, 'showRegistrationForm'])->name('register.landlord');
@@ -31,11 +47,19 @@ Route::post('/signup', [LandlordRegistrationController::class, 'register']);
 Route::get('/login-landlord', [LandlordLoginController::class, 'showLoginForm'])->name('login-landlord');
 Route::post('/login-landlord', [LandlordLoginController::class, 'login'])->name('login-landlord.post');
 
-//Tenant middleware
-Route::middleware(['tenant.auth'])->group(function () {
-    Route::get('/tenant/dashboard', [TenantLoginController::class, 'dashboard'])->name('tenant.dashboard');
-    Route::post('/logout-tenant', [TenantLoginController::class, 'logout'])->name('logout-tenant');
-});
+// //Tenant middleware
+// Route::middleware(['tenant.auth'])->group(function () {
+//     Route::get('/tenant/dashboard', function () {
+//         return view('tenant.home-dashboard');
+//     })->name('tenant.dashboard');
+//     Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
+// });
+
+// //Tenant middleware
+// Route::middleware(['tenant.auth'])->group(function () {
+//     Route::get('/tenant/dashboard', [TenantLoginController::class, 'dashboard'])->name('tenant.dashboard');
+//     Route::post('/logout-tenant', [TenantLoginController::class, 'logout'])->name('logout-tenant');
+// });
 
 //Landlord middleware
 Route::middleware(['landlord.auth'])->group(function () {
