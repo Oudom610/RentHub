@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\TenantController;
 use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
 use App\Http\Controllers\Auth\LandlordRegistrationController;
+use App\Http\Controllers\Auth\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,4 +57,17 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/logout-landlord', [LandlordLoginController::class, 'logout'])->name('logout-landlord');
     Route::get('/tenant/register', [TenantController::class, 'showRegistrationForm'])->name('tenant.register');
     Route::post('/tenant/register', [TenantController::class, 'register'])->name('tenant.register.submit');
+    Route::get('/landlord/profile', [ProfileController::class, 'show'])->name('profile.show');
+    // Route for uploading profile picture
+    Route::post('/profile/upload', [ProfileController::class, 'upload'])->name('profile.upload');
+
+    Route::post('/profile/update', [ProfileController::class, 'updateField'])->name('profile.update');
 });
+
+// // Profile Edit
+// Route::middleware(['auth'])->group(function () {
+//     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+// });
+
+
+

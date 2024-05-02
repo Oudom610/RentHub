@@ -1,7 +1,7 @@
 @extends('layout.dashboard-master')
 
 @section('content')
-
+    
 <!-- sidenav  -->
 <aside class="max-w-62.5 ease-nav-brand z-990 fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0" style="background-color: #3f87e5;">
     <div class="h-19.5">
@@ -79,7 +79,7 @@
                         <i class="fas fa-caret-down ml-auto"></i>
                     </a>
                     <ul class="hidden">
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Edit Profile</a></li>
+                    <li><a href="{{ route('profile.show') }}" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Show Profile</a></li>
                         <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
                     </ul>
                 </li>
@@ -102,7 +102,6 @@
                     </li>
                     <li class="text-sm pl-2 capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']" aria-current="page">Dashboard</li>
                 </ol>
-                <h6 class="mb-0 font-bold capitalize">Home</h6>
             </nav>
 
             <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
@@ -115,7 +114,7 @@
                     <li class="relative">
                         <div class="dropdown-toggle">
                             <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
-                                <img src="profile-picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
+                            <img src="{{ $landlord->profile_picture ? asset('storage/' . $landlord->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" style="width: 32px; height: 32px;" />
                                 <span class="hidden sm:inline">{{ $landlord->landlord_name }}</span>
                                 {{-- <span class="hidden sm:inline">Testing</span> --}}
                                 <i class="fa fa-angle-down ml-2"></i>
