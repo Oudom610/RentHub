@@ -46,22 +46,19 @@ class TenantController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string'
-        ]);
-
         $credentials = $request->only('email', 'password');
-
         if (Auth::guard('tenants')->attempt($credentials)) {
-            $tenant = Auth::guard('tenants')->user();
-            return redirect()->intended(route('tenant.dashboard'))->with('tenant', $tenant);
-        }
+            $user = Auth::guard('tenants')->user();
+            \Log::debug('Tenant login successful', ['user_id' => $user->id, 'email' => $user->email]);
+            return redirect()->intended('tenant/dashboard');
 
-        return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]);
+        } else {
+            \Log::debug('Tenant login failed', ['credentials' => $credentials]);
+            return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
+        }
     }
+
+
 
     //middleware
     // public function dashboard(Request $request)
@@ -71,11 +68,16 @@ class TenantController extends Controller
     //     return view('tenant.home-dashboard', compact('tenant'));
     // }
 
-    public function dashboard(Request $request)
+    public function dashboard()
     {
-        $tenant = $request->session()->get('tenant');
+        $tenant = Auth::guard('tenants')->user();
+        if (!$tenant) {
+            return redirect('login-tenant')->with('error', 'Please log in to continue.');
+        }
         return view('tenant.home-dashboard', compact('tenant'));
     }
+
+
 
     public function logout()
     {

@@ -67,7 +67,7 @@
                         <i class="fas fa-caret-down ml-auto"></i>
                     </a>
                     <ul class="hidden">
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Edit Profile</a></li>
+                    <li><a href="{{ route('tenant.profile') }}" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Show Profile</a></li>
                         <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
                     </ul>
                 </li>
@@ -102,8 +102,8 @@
                 <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
                     <li class="relative">
                         <div class="dropdown-toggle">
-                            <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
-                                <img src="profile-picture.jpg" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
+                        <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
+    <img src="{{ $tenant->profile_picture ? asset('storage/' . $tenant->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" style="width: 32px; height: 32px;" />
                                 <span class="hidden sm:inline">{{ $tenant->tenant_name }}</span>
                                 {{-- <span class="hidden sm:inline">testing</span> --}}
                                 <i class="fa fa-angle-down ml-2"></i>

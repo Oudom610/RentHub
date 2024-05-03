@@ -14,12 +14,16 @@ class TenantAuthMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
         if (!Auth::guard('tenants')->check()) {
-            return redirect('/login-tenant');
+            \Log::debug('TenantAuthMiddleware: tenant not authenticated');
+            return redirect('login-tenant');
         }
 
+        \Log::debug('TenantAuthMiddleware: tenant authenticated', ['user_id' => Auth::guard('tenants')->id()]);
         return $next($request);
     }
+
+
 }

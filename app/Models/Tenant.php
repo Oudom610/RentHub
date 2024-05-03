@@ -11,10 +11,18 @@ class Tenant extends Model implements AuthenticatableContract
 {
     use HasFactory, Authenticatable;
 
-    protected $table = 'tenants'; 
+    protected $table = 'tenants';
+
+    protected $primaryKey = 'tenant_id';
+
 
     protected $fillable = [
-        'landlord_id', 'tenant_name', 'email', 'password', 'contact_info', 'profile_picture'
+        'landlord_id',
+        'tenant_name',
+        'email',
+        'password',
+        'contact_info',
+        'profile_picture'
     ];
 
     // Define the method required by the Authenticatable interface

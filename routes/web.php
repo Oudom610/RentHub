@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
 use App\Http\Controllers\Auth\LandlordRegistrationController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Auth\TenantProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +34,17 @@ Route::get('/', function () {
 // Tenant Login and Stuff
 Route::get('/login-tenant', [TenantController::class, 'showLoginForm'])->name('login-tenant');
 Route::post('/login-tenant', [TenantController::class, 'login'])->name('tenant.login.post');
-Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
-Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
-// Route::get('/tenant/dashboard', function () {
-//     return view('tenant.home-dashboard');
-// })->name('tenant.dashboard');
+// Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
+// Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
+Route::middleware(['tenant.auth'])->group(function () {
+    Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
+    Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
+    Route::get('/tenant/profile', [TenantProfileController::class, 'show'])->name('tenant.profile');
+    Route::post('/tenant/profile/upload', [TenantProfileController::class, 'upload'])->name('tenant.profile.upload');
+    Route::post('/tenant/profile/update', [TenantProfileController::class, 'updateField'])->name('tenant.profile.update');
+
+});
+
 
 // Landlord Signup and Login
 Route::get('/signup', [LandlordRegistrationController::class, 'showRegistrationForm'])->name('register.landlord');
