@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Tenant;
+use App\Models\Landlord;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class TenantController extends Controller
 {
@@ -36,7 +38,56 @@ class TenantController extends Controller
 
         $tenant->save();
 
-        return redirect('/landlord/dashboard')->with('success', 'Tenant registered successfully!');
+        return redirect('/tenant/show')->with('success', 'Tenant registered successfully!');
+    }
+
+    // Show all
+    public function showAllTenant() {
+        // Get the current landlord using the Auth facade or other authentication mechanism
+        $landlord = Auth::guard('landlord')->user(); // Adjust as needed based on your setup
+        // $landlord = Landlord::first();
+        if ($landlord) {
+            // Fetch tenants where landlord_id matches the current landlord's ID
+            $tenants = Tenant::where('landlord_id', $landlord->id) // Get tenants of the current landlord
+                             ->latest() // Optional: sort by latest
+                             ->paginate(10); // Paginate with 10 items per page
+
+            // Pass data to the view
+            return view('landlord.show-tenant', [
+                'tenants' => $tenants,
+                'landlord' => $landlord,
+            ]);
+        } else {
+            // Handle case where the landlord is not found or not logged in
+            Log::error('Landlord not found or not logged in');
+            return redirect()->back()->withErrors(['message' => 'Landlord not found']);
+
+        }
+    }
+
+    // Destroy
+    public function destroy($tenant_id) {
+        $landlord = Auth::guard('landlord')->user();
+    
+        if ($landlord) {
+            // Find the tenant by ID and check if they belong to the current landlord
+            $tenant = Tenant::where('landlord_id', $landlord->id)
+                            ->where('tenant_id', $tenant_id) // Adjust the key to match your model
+                            ->first();
+    
+            if ($tenant) {
+                $tenant->delete();
+                session()->flash('success', 'Tenant deleted successfully.');
+                return redirect()->route('tenant.show'); // Redirect back to the list of tenants
+            } else {
+                // If the tenant doesn't belong to the landlord or doesn't exist
+                session()->flash('error', 'Tenant not found or unauthorized.');
+                return redirect()->back();
+            }
+        } else {
+            Log::error('Landlord not found or not logged in');
+            return redirect()->route('landlord.dashboard')->withErrors(['message' => 'Please log in as a landlord to delete tenants']);
+        }
     }
 
     public function showLoginForm()

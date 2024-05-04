@@ -69,6 +69,13 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/profile/upload', [ProfileController::class, 'upload'])->name('profile.upload');
 
     Route::post('/profile/update', [ProfileController::class, 'updateField'])->name('profile.update');
+
+    // New route for showing all tenants, under the 'landlord.auth' middleware
+    Route::get('/tenant/show', [TenantController::class, 'showAllTenant'])->name('tenant.show');
+
+    // Add the delete route with a corresponding controller method
+    Route::delete('/tenant/show/{tenant_id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
+    
 });
 
 // // Profile Edit
