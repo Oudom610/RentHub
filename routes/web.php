@@ -43,6 +43,9 @@ Route::middleware(['tenant.auth'])->group(function () {
     Route::post('/tenant/profile/upload', [TenantProfileController::class, 'upload'])->name('tenant.profile.upload');
     Route::post('/tenant/profile/update', [TenantProfileController::class, 'updateField'])->name('tenant.profile.update');
 
+    // Update Password
+    Route::get('/tenant/change-password', [TenantProfileController::class, 'showChangePasswordForm'])->name('tenant.change-password');
+    Route::post('/tenant/change-password', [TenantProfileController::class, 'changePassword'])->name('tenant.change-password.update');
 });
 
 
@@ -75,7 +78,10 @@ Route::middleware(['landlord.auth'])->group(function () {
 
     // Add the delete route with a corresponding controller method
     Route::delete('/tenant/show/{tenant_id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
-    
+
+    // Update password
+    Route::get('/landlord/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.change-password');
+    Route::post('/landlord/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password.update');
 });
 
 // // Profile Edit

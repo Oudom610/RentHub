@@ -68,7 +68,7 @@
                     </a>
                     <ul class="hidden">
                     <li><a href="{{ route('tenant.profile') }}" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Show Profile</a></li>
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
+                        <li><a href="/tenant/change-password" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Change Password</a></li>
                     </ul>
                 </li>
 

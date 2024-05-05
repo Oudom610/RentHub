@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -63,6 +65,44 @@ class ProfileController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid field specified.']);
+    }
+
+    // Change Password
+    public function showChangePasswordForm() {
+        $landlord = Auth::guard('landlord')->user();
+        // Return the view for changing password
+        return view('landlord.change-password', compact('landlord'));
+    }
+    
+    public function changePassword(Request $request) {
+        $landlord = Auth::guard('landlord')->user();
+        
+        // Define validation rules
+        $rules = [
+            'old_password' => 'required',
+            'new_password' => 'required|min:5|confirmed', // Password confirmation must match
+        ];
+        
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+    
+        if ($validator->fails()) {
+            // If validation fails, return with errors
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+    
+        // Check if the old password matches the current one
+        if (!Hash::check($request->input('old_password'), $landlord->password)) {
+            return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect'])->withInput();
+        }
+    
+        // If all validations pass, update the password
+        $landlord->password = Hash::make($request->input('new_password'));
+        $landlord->save();
+    
+        session()->flash('success', 'Password changed successfully.');
+    
+        return redirect()->route('profile.show'); // Redirect to a safe location after changing password
     }
 
 }

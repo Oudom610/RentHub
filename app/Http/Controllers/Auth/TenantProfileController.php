@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class TenantProfileController extends Controller
 {
@@ -68,6 +70,44 @@ class TenantProfileController extends Controller
         }
 
         return response()->json(['success' => false, 'message' => 'Invalid field specified.']);
+    }
+
+    // Change Password
+    public function showChangePasswordForm() {
+        $tenant = Auth::guard('tenants')->user();
+        // Return the view for changing password
+        return view('tenant.change-password', compact('tenant'));
+    }
+
+    public function changePassword(Request $request) {
+        $tenant = Auth::guard('tenants')->user(); // Ensure the correct guard is used
+        
+        // Define validation rules
+        $rules = [
+            'old_password' => 'required',
+            'new_password' => 'required|min:5|confirmed', // The new password and confirmation must match
+        ];
+        
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            // If validation fails, return with errors
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Check if the old password matches the current one
+        if (!Hash::check($request->input('old_password'), $tenant->password)) {
+            return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect'])->withInput();
+        }
+
+        // If validation passes, update the password
+        $tenant->password = Hash::make($request->input('new_password'));
+        $tenant->save();
+
+        session()->flash('success', 'Password changed successfully.');
+
+        return redirect()->route('tenant.profile'); // Redirect to a safe location after changing the password
     }
 
 
