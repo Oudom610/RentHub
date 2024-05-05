@@ -45,9 +45,9 @@
                             {{ $tenant->contact_info }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <a href="#" class="text-blue-600 hover:text-blue-800">
+                            <!-- <a href="#" class="text-blue-600 hover:text-blue-800">
                                 View
-                            </a>
+                            </a> -->
                             <span class="mx-2">|</span>
                             <form action="{{ route('tenant.destroy', ['tenant_id' => $tenant->tenant_id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
                                 @csrf
