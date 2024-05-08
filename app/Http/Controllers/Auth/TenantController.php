@@ -100,11 +100,11 @@ class TenantController extends Controller
         $credentials = $request->only('email', 'password');
         if (Auth::guard('tenants')->attempt($credentials)) {
             $user = Auth::guard('tenants')->user();
-            \Log::debug('Tenant login successful', ['user_id' => $user->id, 'email' => $user->email]);
+            Log::debug('Tenant login successful', ['user_id' => $user->id, 'email' => $user->email]);
             return redirect()->intended('tenant/dashboard');
 
         } else {
-            \Log::debug('Tenant login failed', ['credentials' => $credentials]);
+            Log::debug('Tenant login failed', ['credentials' => $credentials]);
             return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
         }
     }

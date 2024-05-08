@@ -36,6 +36,7 @@ Route::get('/login-tenant', [TenantController::class, 'showLoginForm'])->name('l
 Route::post('/login-tenant', [TenantController::class, 'login'])->name('tenant.login.post');
 // Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
 // Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');
+
 Route::middleware(['tenant.auth'])->group(function () {
     Route::get('/tenant/dashboard', [TenantController::class, 'dashboard'])->name('tenant.dashboard');
     Route::post('/logout-tenant', [TenantController::class, 'logout'])->name('logout-tenant');

@@ -19,13 +19,13 @@
                     <input type="password" name="password" id="password" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" required>
                 </div>
                 @if ($errors->any())
-                    <div class="text-red-500 text-sm">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
                 <button type="submit" class="w-full bg-white text-[#1489ec] hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-sm px-4 sm:px-5 py-2 sm:py-2.5 text-center transition duration-300 ease-in-out">Login</button>
                 <p class="text-sm font-light text-gray-300 dark:text-gray-200">

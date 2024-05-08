@@ -24,9 +24,10 @@ class LandlordLoginController extends Controller
             // return redirect()->intended('/dashboard');
         }
 
-        return redirect()->back()->withInput($request->only('email'))->withErrors([
-            'email' => 'These credentials do not match our records.',
-        ]);
+        // return redirect()->back()->withInput($request->only('email'))->withErrors([
+        //     'email' => 'These credentials do not match our records.',
+        // ]);
+        return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
 
     // New method to handle the dashboard rendering

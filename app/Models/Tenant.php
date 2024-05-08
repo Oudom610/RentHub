@@ -15,7 +15,6 @@ class Tenant extends Model implements AuthenticatableContract
 
     protected $primaryKey = 'tenant_id';
 
-
     protected $fillable = [
         'landlord_id',
         'tenant_name',

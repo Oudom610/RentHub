@@ -30,6 +30,15 @@
                     <label for="password_confirmation" class="block mb-2 text-sm font-medium text-white">Confirm password</label>
                     <input type="password" name="password_confirmation" id="password_confirmation" class="bg-white border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-300 focus:border-blue-300 block w-full p-2.5" required>
                 </div>
+                @if ($errors->any())
+                <div style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
                 <button type="submit" class="w-full bg-white text-[#1489ec] hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-sm px-4 sm:px-5 py-2 sm:py-2.5 text-center transition duration-300 ease-in-out">Create an account</button>
                 <p class="text-sm font-light text-gray-300 dark:text-gray-200">
                     Already have a landlord account? <a href="/login-landlord" class="font-medium text-white hover:underline">Login here</a>
