@@ -11,6 +11,8 @@ class Landlord extends Model implements AuthenticatableContract
 {
     use HasFactory, Authenticatable;
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'landlord_name',
         'email',
@@ -34,5 +36,10 @@ class Landlord extends Model implements AuthenticatableContract
     public function getAuthPassword()
     {
         return $this->password; // Assuming 'password' is the hashed password field in your landlords table
+    }
+
+    public function leases()
+    {
+        return $this->hasMany(Lease::class, 'landlord_id', 'id');
     }
 }

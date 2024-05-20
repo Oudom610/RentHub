@@ -44,4 +44,9 @@ class Tenant extends Model implements AuthenticatableContract
     {
         return $this->belongsTo('App\Models\Landlord', 'landlord_id');
     }
+
+    public function leases()
+    {
+        return $this->hasMany(Lease::class, 'tenant_id', 'tenant_id');
+    }
 }

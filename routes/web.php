@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\Auth\TenantController;
+use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
-use App\Http\Controllers\Auth\LandlordRegistrationController;
-use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TenantProfileController;
+use App\Http\Controllers\Auth\LandlordRegistrationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -83,6 +84,11 @@ Route::middleware(['landlord.auth'])->group(function () {
     // Update password
     Route::get('/landlord/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.change-password');
     Route::post('/landlord/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password.update');
+
+     // Create and store lease
+    Route::get('/leases/create', [LeaseController::class, 'create'])->name('leases.create');
+    Route::post('/leases', [LeaseController::class, 'store'])->name('leases.store');
+
 });
 
 // // Profile Edit
