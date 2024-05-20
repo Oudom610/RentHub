@@ -44,7 +44,7 @@
                     </a>
                     <ul class="hidden">
                         <li><a href="/leases/create" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Create Lease</a></li>
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Show Lease</a></li>
+                        <li><a href="/leases" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">Show Lease</a></li>
                     </ul>
                 </li>
                 <li class="mt-0.5 w-full">
