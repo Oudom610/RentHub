@@ -166,7 +166,7 @@ $profileImagePath = $tenant->profile_picture ? 'storage/' . $tenant->profile_pic
                 <span class="profile-value" id="value-tenant_name">{{ $tenant->tenant_name }}</span>
                 <input type="text" class="profile-input" id="input-tenant_name" value="{{ $tenant->tenant_name }}" style="display:none;">
                 <div class="button-container">
-        <button onclick="enableEdit('tenant_name')" class="edit-button" id="edit-button-tenant_name">Edit</button>
+        {{-- <button onclick="enableEdit('tenant_name')" class="edit-button" id="edit-button-tenant_name">Edit</button> --}}
         <button onclick="save('tenant_name')" class="save-button" style="display:none;">Save</button>
         <button onclick="cancel('tenant_name')" class="cancel-button" style="display:none;">Cancel</button>
     </div>
@@ -178,7 +178,7 @@ $profileImagePath = $tenant->profile_picture ? 'storage/' . $tenant->profile_pic
     <span class="profile-value" id="value-email">{{ $tenant->email }}</span>
     <input type="text" class="profile-input" id="input-email" value="{{ $tenant->email }}" style="display:none;">
     <div class="button-container">
-        <button onclick="enableEdit('email')" class="edit-button" id="edit-button-email">Edit</button>
+        {{-- <button onclick="enableEdit('email')" class="edit-button" id="edit-button-email">Edit</button> --}}
         <button onclick="save('email')" class="save-button" style="display:none;">Save</button>
         <button onclick="cancel('email')" class="cancel-button" style="display:none;">Cancel</button>
     </div>

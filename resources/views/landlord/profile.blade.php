@@ -42,6 +42,7 @@
         display: none; /* Initially hidden */
         background-color: #007BFF; /* Save button blue */
         border: 2px solid #0056b3;
+        color: white;
     }
 
     .save-button:hover {
@@ -167,7 +168,7 @@ $profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile
     <span class="profile-value" id="value-landlord_name">{{ $landlord->landlord_name }}</span>
     <input type="text" class="profile-input" id="input-landlord_name" value="{{ $landlord->landlord_name }}" style="display:none;">
     <div class="button-container">
-        <button onclick="enableEdit('landlord_name')" class="edit-button" id="edit-button-landlord_name">Edit</button>
+        {{-- <button onclick="enableEdit('landlord_name')" class="edit-button" id="edit-button-landlord_name">Edit</button> --}}
         <button onclick="save('landlord_name')" class="save-button" style="display:none;">Save</button>
         <button onclick="cancel('landlord_name')" class="cancel-button" style="display:none;">Cancel</button>
     </div>
@@ -179,7 +180,7 @@ $profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile
     <span class="profile-value" id="value-email">{{ $landlord->email }}</span>
     <input type="text" class="profile-input" id="input-email" value="{{ $landlord->email }}" style="display:none;">
     <div class="button-container">
-        <button onclick="enableEdit('email')" class="edit-button" id="edit-button-email">Edit</button>
+        {{-- <button onclick="enableEdit('email')" class="edit-button" id="edit-button-email">Edit</button> --}}
         <button onclick="save('email')" class="save-button" style="display:none;">Save</button>
         <button onclick="cancel('email')" class="cancel-button" style="display:none;">Cancel</button>
     </div>
