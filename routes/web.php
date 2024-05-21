@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\Landlord\LeaseController;
 use App\Http\Controllers\Auth\TenantController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\TenantLoginController;
@@ -48,6 +48,9 @@ Route::middleware(['tenant.auth'])->group(function () {
     // Update Password
     Route::get('/tenant/change-password', [TenantProfileController::class, 'showChangePasswordForm'])->name('tenant.change-password');
     Route::post('/tenant/change-password', [TenantProfileController::class, 'changePassword'])->name('tenant.change-password.update');
+
+    //View lease
+    Route::get('/tenant/leases', [LeaseController::class, 'showTenantLeases'])->name('tenant.leases');
 });
 
 
@@ -90,7 +93,7 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/leases', [LeaseController::class, 'store'])->name('leases.store');
     
     Route::get('/leases', [LeaseController::class, 'index'])->name('leases.index');
-    Route::get('/leases/{lease}', [LeaseController::class, 'show'])->name('leases.show');
+    // Route::get('/leases/{lease}', [LeaseController::class, 'show'])->name('leases.show');
     Route::get('/leases/{lease}/edit', [LeaseController::class, 'edit'])->name('leases.edit');
     Route::put('/leases/{lease}', [LeaseController::class, 'update'])->name('leases.update');
     Route::delete('/leases/{lease}', [LeaseController::class, 'destroy'])->name('leases.destroy');

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Landlord;
 
 use App\Models\Lease;
 use App\Models\Tenant;
@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
 
 class LeaseController extends Controller
 {
@@ -72,11 +73,11 @@ class LeaseController extends Controller
         return view('landlord.show-leases', compact('leases', 'landlord'));
     }
 
-    public function show(Lease $lease)
-    {
-        $landlord = Auth::guard('landlord')->user();
-        return view('landlord.show-lease', compact('lease', 'landlord'));
-    }
+    // public function show(Lease $lease)
+    // {
+    //     $landlord = Auth::guard('landlord')->user();
+    //     return view('landlord.show-lease', compact('lease', 'landlord'));
+    // }
 
     public function edit(Lease $lease)
     {
@@ -127,5 +128,17 @@ class LeaseController extends Controller
 
         return redirect()->route('leases.index')->with('success', 'Lease deleted successfully.');
     }
+
+    //For tenants
+
+    public function showTenantLeases()
+    {
+        $tenant = Auth::guard('tenants')->user();
+        // $leases = Lease::where('tenant_id', $tenant->tenant_id)->with('landlord')->get();
+        $leases = Lease::where('tenant_id', $tenant->tenant_id)->get();
+        
+        return view('tenant.show-leases', compact('leases', 'tenant'));
+    }
+
 
 }

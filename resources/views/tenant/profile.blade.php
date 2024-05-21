@@ -150,6 +150,7 @@
 </style>
 
 <!-- Profile Card and Modal within Main Section -->
+<main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
 <main class="profile-card">
         <div class="profile-picture-container">
         @php
@@ -212,6 +213,7 @@ $profileImagePath = $tenant->profile_picture ? 'storage/' . $tenant->profile_pic
         </div>
     </div>
     <!-- Modal End -->
+</main>
 </main>
 
 <script>

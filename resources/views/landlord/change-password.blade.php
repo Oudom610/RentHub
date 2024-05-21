@@ -3,6 +3,7 @@
 @section('content')
     @parent
 
+<main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
     <div class="container mx-auto px-4 py-6">
         <h1 class="text-2xl font-bold mb-4">Change Password</h1>
 
@@ -44,4 +45,5 @@
             
         </form>
     </div>
+</main>
 @endsection

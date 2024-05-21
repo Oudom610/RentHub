@@ -32,6 +32,9 @@
                         End Date
                     </th>
                     <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Lease Agreement
+                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
                     </th>
                 </tr>
@@ -52,8 +55,11 @@
                             {{ $lease->end_date }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            <a href="{{ route('leases.show', $lease) }}" class="text-blue-600 hover:text-blue-800">View</a>
-                            <span class="mx-2">|</span>
+                            <a href="{{ asset('storage/' . $lease->lease_agreement) }}" target="_blank">View Lease Agreement</a>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                            {{-- <a href="{{ route('leases.show', $lease) }}" class="text-blue-600 hover:text-blue-800">View</a>
+                            <span class="mx-2">|</span> --}}
                             <a href="{{ route('leases.edit', $lease) }}" class="text-indigo-600 hover:text-indigo-800">Edit</a>
                             <span class="mx-2">|</span>
                             <form action="{{ route('leases.destroy', $lease) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this lease?');">
