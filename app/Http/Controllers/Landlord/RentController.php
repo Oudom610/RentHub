@@ -112,5 +112,14 @@ class RentController extends Controller
     }
 
 
+    //Tenant
+    public function showRent()
+    {
+        $tenant = Auth::guard('tenants')->user();
+        $rentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->with('landlord', 'lease')->get();
+
+        return view('tenant.show-rent', compact('rentPayments', 'tenant'));
+    }
+
 
 }

@@ -53,6 +53,9 @@ Route::middleware(['tenant.auth'])->group(function () {
     //View lease
     Route::get('/tenant/leases', [LeaseController::class, 'showTenantLeases'])->name('tenant.leases');
 
+    //View rent
+    Route::get('/tenant/rent', [RentController::class, 'showRent'])->name('tenant.showRent');
+
 });
 
 

@@ -26,6 +26,12 @@ class RentPayment extends Model
         return $this->belongsTo(Lease::class, 'lease_id', 'lease_id');
     }
 
+    public function landlord()
+    {
+        return $this->belongsTo(Landlord::class);
+    }
+
+
     // Define the relationship with the tenant
     public function tenant()
     {

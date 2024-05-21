@@ -5,7 +5,7 @@
 
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
         <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 lg:p-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Your Lease Agreement</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Your Rent Payment</h2>
             
             @if (session('success'))
                 <div id="flash-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
@@ -23,27 +23,23 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Your Landlord</th>
-                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Your Room Number</th>
-                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Start Date</th>
-                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">End Date</th>
-                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Action</th>
+                        {{-- <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Landlord Name</th>
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Room Number</th> --}}
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Rent Due Date</th>
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Amount ($)</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse ($leases as $lease)
+                    @forelse ($rentPayments as $payment)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $lease->landlord->landlord_name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $lease->room_number }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $lease->start_date }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $lease->end_date }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
-                                <a href="{{ Storage::url($lease->lease_agreement) }}" target="_blank" class="text-blue-600 hover:text-blue-800">Click Here To View Your Lease Agreement</a>
-                            </td>
+                            {{-- <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->landlord->landlord_name }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->lease->room_number }}</td> --}}
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->payment_date }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->amount }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">You have no lease agreements!</td>
+                            <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">You have no rent payments!</td>
                         </tr>
                     @endforelse
                 </tbody>
