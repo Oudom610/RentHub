@@ -1,9 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Landlord\LeaseController;
 use App\Http\Controllers\Auth\TenantController;
 use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\Landlord\RentController;
+use App\Http\Controllers\Landlord\LeaseController;
 use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
 use App\Http\Controllers\Auth\TenantProfileController;
@@ -51,6 +52,7 @@ Route::middleware(['tenant.auth'])->group(function () {
 
     //View lease
     Route::get('/tenant/leases', [LeaseController::class, 'showTenantLeases'])->name('tenant.leases');
+
 });
 
 
@@ -88,15 +90,22 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::get('/landlord/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('profile.change-password');
     Route::post('/landlord/change-password', [ProfileController::class, 'changePassword'])->name('profile.change-password.update');
 
-    //Create lease
+    //Lease stuff
     Route::get('/leases/create', [LeaseController::class, 'create'])->name('leases.create');
     Route::post('/leases', [LeaseController::class, 'store'])->name('leases.store');
-    
     Route::get('/leases', [LeaseController::class, 'index'])->name('leases.index');
     // Route::get('/leases/{lease}', [LeaseController::class, 'show'])->name('leases.show');
     Route::get('/leases/{lease}/edit', [LeaseController::class, 'edit'])->name('leases.edit');
     Route::put('/leases/{lease}', [LeaseController::class, 'update'])->name('leases.update');
     Route::delete('/leases/{lease}', [LeaseController::class, 'destroy'])->name('leases.destroy');
+
+    //Rent stuff
+    Route::get('/rent', [RentController::class, 'index'])->name('rent.index');
+    Route::get('/rent/create', [RentController::class, 'create'])->name('rent.create');
+    Route::post('/rent/store', [RentController::class, 'store'])->name('rent.store');
+
+    Route::put('/rent/{rentPayment}/updateStatus', [RentController::class, 'updateStatus'])->name('rent.updateStatus');
+    Route::delete('/rent/{rentPayment}', [RentController::class, 'destroy'])->name('rent.destroy');
 
 });
 
