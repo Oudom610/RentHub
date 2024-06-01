@@ -107,7 +107,6 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::get('/rent', [RentController::class, 'index'])->name('rent.index');
     Route::get('/rent/create', [RentController::class, 'create'])->name('rent.create');
     Route::post('/rent/store', [RentController::class, 'store'])->name('rent.store');
-
     Route::put('/rent/{rentPayment}/updateStatus', [RentController::class, 'updateStatus'])->name('rent.updateStatus');
     // Route::delete('/rent/{rentPayment}', [RentController::class, 'destroy'])->name('rent.destroy');
 

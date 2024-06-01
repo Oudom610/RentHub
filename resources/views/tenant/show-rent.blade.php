@@ -41,7 +41,7 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->amount }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
                                 @if($payment->proof_of_payment)
-                                    <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">View</a>
+                                    <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">Click Here to View Payment Proof</a>
                                 @else
                                     N/A
                                 @endif

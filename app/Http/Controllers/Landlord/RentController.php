@@ -13,12 +13,23 @@ class RentController extends Controller
 {
     public function index()
     {
-        // Fetch all rent payments with related lease and tenant information
-        $rentPayments = RentPayment::with('lease', 'tenant')->get();
+        // // Fetch all rent payments with related lease and tenant information
+        // $rentPayments = RentPayment::with('lease', 'tenant')->get();
+        // $landlord = Auth::guard('landlord')->user();
+        // $tenants = Tenant::where('landlord_id', $landlord->id)->get();
+
+        // return view('landlord.rent-show', compact('rentPayments', 'landlord', 'tenants'));
+
+
+        // Fetch rent payments based on their status
+        $pendingPayments = RentPayment::with('lease', 'tenant')->where('status', 'pending')->get();
+        $approvedPayments = RentPayment::with('lease', 'tenant')->where('status', 'approved')->get();
+        $declinedPayments = RentPayment::with('lease', 'tenant')->where('status', 'declined')->get();
+
         $landlord = Auth::guard('landlord')->user();
         $tenants = Tenant::where('landlord_id', $landlord->id)->get();
 
-        return view('landlord.rent-show', compact('rentPayments', 'landlord', 'tenants'));
+        return view('landlord.rent-show', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'landlord', 'tenants'));
     }
 
     public function create()
@@ -133,6 +144,7 @@ class RentController extends Controller
             // Store the file
             $path = $request->file('proof_of_payment')->store('proof_of_payments', 'public');
             $rentPayment->proof_of_payment = $path;
+            $rentPayment->status = 'pending'; // Set status to pending after re-upload
             $rentPayment->save();
 
             return redirect()->back()->with('success', 'Proof of payment uploaded successfully.');
