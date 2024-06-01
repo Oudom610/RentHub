@@ -55,6 +55,7 @@ Route::middleware(['tenant.auth'])->group(function () {
 
     //View rent
     Route::get('/tenant/rent', [RentController::class, 'showRent'])->name('tenant.showRent');
+    Route::post('/tenant/rent/upload-proof/{rentPaymentId}', [RentController::class, 'uploadProof'])->name('tenant.uploadProof');
 
 });
 
@@ -108,7 +109,7 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/rent/store', [RentController::class, 'store'])->name('rent.store');
 
     Route::put('/rent/{rentPayment}/updateStatus', [RentController::class, 'updateStatus'])->name('rent.updateStatus');
-    Route::delete('/rent/{rentPayment}', [RentController::class, 'destroy'])->name('rent.destroy');
+    // Route::delete('/rent/{rentPayment}', [RentController::class, 'destroy'])->name('rent.destroy');
 
 });
 

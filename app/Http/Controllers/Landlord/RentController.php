@@ -104,12 +104,12 @@ class RentController extends Controller
         return redirect()->route('rent.index')->with('success', 'Rent payment status updated successfully.');
     }
 
-    public function destroy(RentPayment $rentPayment)
-    {
-        $rentPayment->delete();
+    // public function destroy(RentPayment $rentPayment)
+    // {
+    //     $rentPayment->delete();
 
-        return redirect()->route('rent.index')->with('success', 'Rent payment deleted successfully.');
-    }
+    //     return redirect()->route('rent.index')->with('success', 'Rent payment deleted successfully.');
+    // }
 
 
     //Tenant
@@ -121,5 +121,24 @@ class RentController extends Controller
         return view('tenant.show-rent', compact('rentPayments', 'tenant'));
     }
 
+    public function uploadProof(Request $request, $rentPaymentId)
+    {
+        $request->validate([
+            'proof_of_payment' => 'required|mimes:pdf,png,jpg,jpeg|max:2048',
+        ]);
 
+        $rentPayment = RentPayment::findOrFail($rentPaymentId);
+
+        if ($request->hasFile('proof_of_payment')) {
+            // Store the file
+            $path = $request->file('proof_of_payment')->store('proof_of_payments', 'public');
+            $rentPayment->proof_of_payment = $path;
+            $rentPayment->save();
+
+            return redirect()->back()->with('success', 'Proof of payment uploaded successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to upload proof of payment.');
+    }
+    
 }

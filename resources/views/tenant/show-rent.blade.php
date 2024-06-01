@@ -27,6 +27,9 @@
                         <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Room Number</th> --}}
                         <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Rent Due Date</th>
                         <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Amount ($)</th>
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Proof of Payment</th>
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Status</th>
+                        <th class="px-6 py-3 bg-gray-50 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Upload Payment Proof</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -36,6 +39,21 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->lease->room_number }}</td> --}}
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->payment_date }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $payment->amount }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                                @if($payment->proof_of_payment)
+                                    <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">View</a>
+                                @else
+                                    N/A
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ ucfirst($payment->status) }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                                <form action="{{ route('tenant.uploadProof', $payment->rent_payment_id) }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="file" name="proof_of_payment" accept="application/pdf, image/png, image/jpeg, image/jpg" required>
+                                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" style="background-color: #3f87e5;">Upload</button>
+                                </form>
+                            </td>
                         </tr>
                     @empty
                         <tr>

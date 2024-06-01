@@ -37,9 +37,9 @@
                     <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Status
                     </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    {{-- <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Actions
-                    </th>
+                    </th> --}}
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -58,7 +58,11 @@
                             {{ $payment->amount }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->proof_of_payment }}
+                            @if ($payment->proof_of_payment)
+                                <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">View</a>
+                            @else
+                                N/A
+                            @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
                             <form action="{{ route('rent.updateStatus', $payment) }}" method="POST">
@@ -72,13 +76,13 @@
                                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" style="background-color: #3f87e5;">Update Status</button>
                             </form>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
+                        {{-- <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
                             <form action="{{ route('rent.destroy', $payment) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this rent payment?');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" style="background-color: #3f87e5;">Delete</button>
                             </form>
-                        </td>
+                        </td> --}}
                     </tr>
                 @empty
                     <tr>
