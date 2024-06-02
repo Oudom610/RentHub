@@ -22,41 +22,21 @@
         <table class="min-w-full divide-y divide-gray-200 mb-10">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Room Number
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Tenant Name
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rent Due Date
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount ($)
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Proof of Payment
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Status
-                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rent Due Date</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Amount ($)</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($pendingPayments as $payment)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->lease->room_number }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $payment->tenant->tenant_name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->payment_date }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->amount }}
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->payment_date }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->amount }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
                             @if ($payment->proof_of_payment)
                                 <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">Click Here to View Payment Proof</a>
@@ -79,9 +59,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
-                            No pending payments found!
-                        </td>
+                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No pending payments found!</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -92,38 +70,20 @@
         <table class="min-w-full divide-y divide-gray-200 mb-10">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Room Number
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Tenant Name
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rent Due Date
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount ($)
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Proof of Payment
-                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rent Due Date</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Amount ($)</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($approvedPayments as $payment)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->lease->room_number }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $payment->tenant->tenant_name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->payment_date }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->amount }}
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->payment_date }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->amount }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
                             @if ($payment->proof_of_payment)
                                 <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">Click Here to View Payment Proof</a>
@@ -134,9 +94,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                            No approved payments found!
-                        </td>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No approved payments found!</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -147,38 +105,20 @@
         <table class="min-w-full divide-y divide-gray-200 mb-10">
             <thead>
                 <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Room Number
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Tenant Name
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Rent Due Date
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Amount ($)
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Proof of Payment
-                    </th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
+                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Rent Due Date</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Amount ($)</th>
+                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($declinedPayments as $payment)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->lease->room_number }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $payment->tenant->tenant_name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->payment_date }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            {{ $payment->amount }}
-                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->payment_date }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->amount }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
                             @if ($payment->proof_of_payment)
                                 <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">Click Here to View Payment Proof</a>
@@ -189,9 +129,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                            No declined payments found!
-                        </td>
+                        <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">No declined payments found!</td>
                     </tr>
                 @endforelse
             </tbody>

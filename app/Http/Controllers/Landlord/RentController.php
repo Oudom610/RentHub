@@ -90,7 +90,7 @@ class RentController extends Controller
             'payment_date' => $request->payment_date,
             'amount' => $request->amount,
             'proof_of_payment' => $request->proof_of_payment,
-            'status' => $request->status,
+            'status' => $request->status ?? 'pending',
         ]);
 
         if (!$rentPayment) {
@@ -127,9 +127,12 @@ class RentController extends Controller
     public function showRent()
     {
         $tenant = Auth::guard('tenants')->user();
-        $rentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->with('landlord', 'lease')->get();
+        
+        $pendingPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->get();
+        $approvedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->get();
+        $declinedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->get();
 
-        return view('tenant.show-rent', compact('rentPayments', 'tenant'));
+        return view('tenant.show-rent', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'tenant'));
     }
 
     public function uploadProof(Request $request, $rentPaymentId)
