@@ -3,7 +3,15 @@
 @section('content')
     @parent <!-- Retain master layout content -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
+
+        <!-- Success Message -->
         @if (session('success'))
+            <div id="flash-message" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        <!-- @if (session('success'))
             <div id="flash-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                 <strong class="font-bold">Success!</strong>
                 <span class="block sm:inline">{{ session('success') }}</span>
@@ -14,7 +22,7 @@
                     </svg>
                 </span>
             </div>
-        @endif
+        @endif -->
         <table class=" min-w-full divide-y divide-gray-200">
             <thead>
                 <tr>
