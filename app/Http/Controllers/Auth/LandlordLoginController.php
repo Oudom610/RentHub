@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Landlord;
+use App\Models\Lease;
+use App\Models\Tenant;
+use App\Models\RentPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class LandlordLoginController extends Controller
 {
@@ -35,10 +39,33 @@ class LandlordLoginController extends Controller
     {
         if (Auth::guard('landlord')->check()) {
             $landlord = Auth::guard('landlord')->user();
-            // return view('landlord.home-dashboard', compact('landlord'));
-            return view('landlord.home-dashboard', ['landlord' => $landlord]);
+            
+            // Fetch the required data for the dashboard
+            $totalTenants = Tenant::where('landlord_id', $landlord->id)->count();
+            $activeLeases = Lease::where('landlord_id', $landlord->id)->where('end_date', '>=', now())->count();
+            $pendingPayments = RentPayment::whereHas('lease', function($query) use ($landlord) {
+                $query->where('landlord_id', $landlord->id);
+            })->where('status', 'pending')->count();
+
+            // Fetch recent pending payments
+            $recentPendingPayments = RentPayment::with('tenant', 'lease')
+                ->whereHas('lease', function($query) use ($landlord) {
+                    $query->where('landlord_id', $landlord->id);
+                })
+                ->where('status', 'pending')
+                ->orderBy('payment_date', 'desc')
+                ->limit(5)
+                ->get();
+
+            // Fetch leases expiring within the next month
+            $upcomingLeaseExpirations = Lease::with('tenant')
+                ->where('landlord_id', $landlord->id)
+                ->where('end_date', '<=', Carbon::now()->addMonth())
+                ->orderBy('end_date', 'asc')
+                ->get();
+
+            return view('landlord.home-dashboard', compact('totalTenants', 'activeLeases', 'pendingPayments', 'recentPendingPayments', 'upcomingLeaseExpirations', 'landlord'));
         } else {
-            // If not authenticated, redirect to landlord login
             return redirect()->route('login-landlord');
         }
     }
