@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\Tenant;
-use App\Models\Landlord;
+use App\Models\Lease;
+use App\Models\RentPayment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -125,8 +126,22 @@ class TenantController extends Controller
         if (!$tenant) {
             return redirect('login-tenant')->with('error', 'Please log in to continue.');
         }
-        return view('tenant.home-dashboard', compact('tenant'));
+
+        // Fetch the most recent lease
+        $currentLease = Lease::where('tenant_id', $tenant->tenant_id)->latest('start_date')->first();
+
+        // Count pending rent payments
+        $pendingRentPaymentsCount = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->count();
+
+        // Count declined rent payments
+        $declinedRentPaymentsCount = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->count();
+
+        // Fetch pending rent payments
+        $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->get();
+
+        return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPaymentsCount', 'declinedRentPaymentsCount', 'pendingRentPayments'));
     }
+
 
 
 

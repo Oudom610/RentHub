@@ -43,8 +43,11 @@
     
             <!-- Summary Tables -->
             <div class="card mb-4">
-                <div class="card-header">
-                    Pending Payments
+                <div class="card-header d-flex justify-content-between">
+                    <span>Pending Payments (Rent)</span>
+                    @if ($pendingPayments > 0)
+                        <a href="{{ route('rent.index') }}" class="btn btn-primary">Go to Rent</a>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -75,10 +78,11 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="card mb-4">
-                <div class="card-header">
-                    Upcoming Lease Expirations
+                <div class="card-header d-flex justify-content-between">
+                    <span>Upcoming Lease Expirations</span>
+                    <a href="{{ route('leases.index') }}" class="btn btn-primary">Go to Leases</a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -107,6 +111,7 @@
                     </div>
                 </div>
             </div>
+            
         {{-- </main> --}}
     </main>
     <!-- End Main Content Area -->
