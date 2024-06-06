@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\TenantLoginController;
 use App\Http\Controllers\Auth\LandlordLoginController;
 use App\Http\Controllers\Auth\TenantProfileController;
 use App\Http\Controllers\Auth\LandlordRegistrationController;
+use App\Http\Controllers\Landlord\UtilityBillController;
 
 /*
 |--------------------------------------------------------------------------
@@ -109,6 +110,10 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::post('/rent/store', [RentController::class, 'store'])->name('rent.store');
     Route::put('/rent/{rentPayment}/updateStatus', [RentController::class, 'updateStatus'])->name('rent.updateStatus');
     // Route::delete('/rent/{rentPayment}', [RentController::class, 'destroy'])->name('rent.destroy');
+
+    //Utility Bill stuff
+    Route::get('/utility/create', [UtilityBillController::class, 'create'])->name('utility.create');
+    Route::post('/utility', [UtilityBillController::class, 'store'])->name('utility.store');
 
 });
 
