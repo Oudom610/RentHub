@@ -127,25 +127,26 @@
     </nav>
 </main>   --}}
 <!-- Navbar -->
+
 <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <nav>
-                <!-- breadcrumb -->
-                <ol class="breadcrumb pt-1 bg-transparent rounded-lg">
-                    <li class="breadcrumb-item">
-                        <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                </ol>
-            </nav>
+            <div class="d-flex justify-content-between w-100 align-items-center">
+                <nav aria-label="breadcrumb" class="mb-2">
+                    <!-- breadcrumb -->
+                    <ol class="breadcrumb pt-3 bg-transparent rounded-lg mb-0" style="margin-bottom: 0 !important;">
+                        <li class="breadcrumb-item">
+                            <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
 
-            <div class="d-flex">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto d-flex align-items-center">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="{{ $tenant->profile_picture ? asset('storage/' . $tenant->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
-                            <span class="hidden sm:inline">{{ $tenant->tenant_name }}</span>
+                            <span class="d-none d-sm-inline">{{ $tenant->tenant_name }}</span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item" href="{{ route('tenant.profile') }}">Profile</a>
@@ -159,11 +160,9 @@
                     </li>
                 </ul>
             </div>
-            
         </div>
     </nav>
-</main>  
-<!-- end Navbar -->
+</main>
 <!-- end Navbar -->
 
 

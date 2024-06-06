@@ -92,56 +92,43 @@
 
 <!-- Navbar -->
 <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
-    <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start" navbar-main navbar-scroll="true">
-        <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
-            <nav>
-                <!-- breadcrumb -->
-                <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
-                    <li class="text-sm leading-normal">
-                        <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
-                    </li>
-                    <li class="text-sm pl-2 capitalize leading-normal text-slate-700 before:float-left before:pr-2 before:text-gray-600 before:content-['/']" aria-current="page">Dashboard</li>
-                </ol>
-            </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between w-100 align-items-center">
+                <nav aria-label="breadcrumb" class="mb-2">
+                    <!-- breadcrumb -->
+                    <ol class="breadcrumb pt-3 bg-transparent rounded-lg mb-0" style="margin-bottom: 0 !important;">
+                        <li class="breadcrumb-item">
+                            <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
 
-            <div class="flex items-center mt-2 grow sm:mt-0 sm:mr-6 md:mr-0 lg:flex lg:basis-auto">
-                <div class="flex items-center md:ml-auto md:pr-4">
-                    <div class="relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-                    </div>
-                </div>
-
-                <ul class="flex flex-row justify-end pl-0 mb-0 list-none md-max:w-full">
-                    <li class="relative">
-                        <div class="dropdown-toggle">
-                            <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
-                            <img src="{{ $landlord->profile_picture ? asset('storage/' . $landlord->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" style="width: 32px; height: 32px;" />
-                                <span class="hidden sm:inline">{{ $landlord->landlord_name }}</span>
-                                {{-- <span class="hidden sm:inline">Testing</span> --}}
-                                <i class="fa fa-angle-down ml-2"></i>
-                            </a>
-                        </div>
-                        <div id="dropdownMenu" class="absolute right-0 z-10 hidden dropdown-menu" style="top: 100%; min-width: 120px;"> <!-- Set a min-width here -->
-                            <ul class="py-1 bg-white rounded-md shadow-lg">
-                                <li>
-                                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-500 hover:text-blue hover:font-bold">
-                                        <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                                    </a>
-                                    
-                                    <form id="logout-form" action="{{ route('logout-landlord') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </li>
-                            </ul>                            
-
+                <ul class="navbar-nav ml-auto d-flex align-items-center">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ $landlord->profile_picture ? asset('storage/' . $landlord->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
+                            <span class="d-none d-sm-inline">{{ $landlord->landlord_name }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('profile.show') }}">Profile</a>
+                            <a class="dropdown-item" href="/landlord/change-password">Change Password</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout-landlord') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
                         </div>
                     </li>
                 </ul>
-                 
             </div>
         </div>
     </nav>
-</main>  
+</main>
 <!-- end Navbar -->
+
+
 
 
 @endsection
