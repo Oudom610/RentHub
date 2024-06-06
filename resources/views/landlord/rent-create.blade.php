@@ -13,14 +13,14 @@
             
             <!-- Success Message -->
             @if (session('success'))
-                <div style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
+                <div id="flash-message" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
                     {{ session('success') }}
                 </div>
             @endif
 
             {{-- Error message --}}
             @if ($errors->any())
-                <div style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
+                <div id="flash-message" style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
                     <ul>
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -69,6 +69,15 @@
                 </div>
             </form>
         </div>
+        <script>
+            // Hide the flash message after 2 seconds
+            setTimeout(function() {
+                var flashMessage = document.getElementById('flash-message');
+                if (flashMessage) {
+                    flashMessage.style.display = 'none';
+                }
+            }, 2000); // 2000 milliseconds = 2 seconds
+        </script>
     </main>
     <!-- End Main Content Area -->
 
