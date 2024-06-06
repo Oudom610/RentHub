@@ -77,11 +77,10 @@
 <!-- end sidenav -->
 
 <!-- Navbar -->
-<main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+{{-- <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
     <nav class="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start" navbar-main navbar-scroll="true">
         <div class="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
             <nav>
-                <!-- breadcrumb -->
                 <ol class="flex flex-wrap pt-1 mr-12 bg-transparent rounded-lg sm:mr-16">
                     <li class="text-sm leading-normal">
                         <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
@@ -103,7 +102,6 @@
                         <a href="#" class="block px-0 py-2 text-sm font-semibold transition-all ease-nav-brand text-slate-500 flex items-center" id="dropdownToggle" onclick="toggleDropdown()">
     <img src="{{ $tenant->profile_picture ? asset('storage/' . $tenant->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" style="width: 32px; height: 32px;" />
                                 <span class="hidden sm:inline">{{ $tenant->tenant_name }}</span>
-                                {{-- <span class="hidden sm:inline">testing</span> --}}
                                 <i class="fa fa-angle-down ml-2"></i>
                             </a>
                         </div>
@@ -127,7 +125,45 @@
             </div>
         </div>
     </nav>
+</main>   --}}
+<!-- Navbar -->
+<main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <nav>
+                <!-- breadcrumb -->
+                <ol class="breadcrumb pt-1 bg-transparent rounded-lg">
+                    <li class="breadcrumb-item">
+                        <a class="opacity-50 text-slate-700" href="javascript:;">Pages</a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ $tenant->profile_picture ? asset('storage/' . $tenant->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
+                            <span class="hidden sm:inline">{{ $tenant->tenant_name }}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('tenant.profile') }}">Profile</a>
+                            <a class="dropdown-item" href="/tenant/change-password">Change Password</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+                            <form id="logout-form" action="{{ route('logout-tenant') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+        </div>
+    </nav>
 </main>  
+<!-- end Navbar -->
 <!-- end Navbar -->
 
 
