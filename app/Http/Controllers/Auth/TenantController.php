@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class TenantController extends Controller
 {
@@ -121,28 +122,32 @@ class TenantController extends Controller
     // }
 
     public function dashboard()
-    {
-        $tenant = Auth::guard('tenants')->user();
-        if (!$tenant) {
-            return redirect('login-tenant')->with('error', 'Please log in to continue.');
-        }
-
-        // Fetch the most recent lease
-        $currentLease = Lease::where('tenant_id', $tenant->tenant_id)->latest('start_date')->first();
-
-        // Count pending rent payments
-        $pendingRentPaymentsCount = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->count();
-
-        // Count declined rent payments
-        $declinedRentPaymentsCount = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->count();
-
-        // Fetch pending rent payments
-        $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->get();
-
-        return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPaymentsCount', 'declinedRentPaymentsCount', 'pendingRentPayments'));
+{
+    $tenant = Auth::guard('tenants')->user();
+    if (!$tenant) {
+        return redirect('login-tenant')->with('error', 'Please log in to continue.');
     }
 
+    // Fetch the most recent lease
+    $currentLease = Lease::where('tenant_id', $tenant->tenant_id)->latest('start_date')->first();
 
+    // Fetch upcoming lease expirations within the next month
+    $upcomingLeaseExpiration = null;
+    if ($currentLease && $currentLease->end_date <= Carbon::now()->addMonth()) {
+        $upcomingLeaseExpiration = $currentLease;
+    }
+
+    // Fetch pending rent payments
+    $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)
+        ->where('status', 'pending')
+        ->whereNull('proof_of_payment')
+        ->get();
+
+    // Fetch declined rent payments
+    $declinedRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
+
+    return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPayments', 'declinedRentPayments', 'upcomingLeaseExpiration'));
+}
 
 
     public function logout()

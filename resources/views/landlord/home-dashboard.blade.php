@@ -52,6 +52,39 @@
         <!-- Summary Tables -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white d-flex justify-content-between">
+                <span><i class="fas fa-calendar-alt"></i> Upcoming Lease Expirations</span>
+                <a href="{{ route('leases.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Lease</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Tenant Name</th>
+                                <th>Room Number</th>
+                                <th>End Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($upcomingLeaseExpirations as $lease)
+                                <tr>
+                                    <td>{{ $lease->tenant->tenant_name }}</td>
+                                    <td>{{ $lease->room_number }}</td>
+                                    <td>{{ $lease->end_date }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3" class="text-center">No upcoming lease expirations found!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between">
                 <span><i class="fas fa-money-bill-wave"></i> Pending Rent</span>
                 {{-- @if ($pendingRentPayments > 0) --}}
                     <a href="{{ route('rent.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Rent</a>
@@ -124,38 +157,6 @@
             </div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-calendar-alt"></i> Upcoming Lease Expirations</span>
-                <a href="{{ route('leases.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Lease</a>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Tenant Name</th>
-                                <th>Room Number</th>
-                                <th>End Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($upcomingLeaseExpirations as $lease)
-                                <tr>
-                                    <td>{{ $lease->tenant->tenant_name }}</td>
-                                    <td>{{ $lease->room_number }}</td>
-                                    <td>{{ $lease->end_date }}</td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3" class="text-center">No upcoming lease expirations found!</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
         
     </main>
     <!-- End Main Content Area -->
