@@ -6,81 +6,97 @@
 
     <!-- Main Content Area -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
+        
         <!-- Form Container -->
-        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 lg:p-8">
-            <!-- Form Title -->
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Create Lease</h2>
-            
-            <!-- Success Message -->
-            @if (session('success'))
-                <div id="flash-message" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                    {{ session('success') }}
+        <div class="container mt-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary">
+                    <h2 class="mb-0 text-white"><i class="fas fa-file-contract text-white"></i> Create Lease</h2>
                 </div>
-            @endif
+                <div class="card-body">
+                    <!-- Success Message -->
+                    @if (session('success'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('success') }}
+                    </div>
+                    @endif
 
-            {{-- Error message --}}
-            @if ($errors->any())
-                <div id="flash-message" style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                    <ul>
-                        @foreach ($errors->all() as $error)
+                    <!-- Error Messages -->
+                    @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-            
-            <form class="w-full max-w-lg" id="leaseForm" method="POST" action="{{ route('leases.store') }}" enctype="multipart/form-data">
-                @csrf
-                <div class="flex flex-wrap -mx-3 mb-6">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Tenant
-                        </label>
-                        <select name="tenant_id" id="tenant_id" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" required>
-                            <option value="">Select a tenant</option>
-                            @foreach ($tenants as $tenant)
-                                <option value="{{ $tenant->tenant_id }}">{{ $tenant->tenant_name }}</option>
                             @endforeach
-                        </select>
+                        </ul>
                     </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Room Number
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="room_number" placeholder="Enter room number" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Start Date
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="start_date" type="date" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            End Date
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="end_date" type="date" required>
-                    </div>
-                    <div class="w-full px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Lease Agreement (PDF)
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="lease_agreement" type="file" accept=".pdf" required>
-                    </div>
-                </div>
-                <div class="w-full px-3 mb-6 md:mb-0">
-                    <!-- Submit button -->
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" style="background-color: #3f87e5;">
-                        Create Lease
-                    </button>
-                    <!-- Cancel button -->
-                    <button class="bg-gray-500 hover:bg-gray-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2" type="button" onclick="clearForm('leaseForm')">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-            
+                    @endif
 
+                    <form id="leaseForm" method="POST" action="{{ route('leases.store') }}" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tenant_id" class="fw-bold text-dark">Tenant</label>
+                                <select name="tenant_id" id="tenant_id" class="form-control @error('tenant_id') is-invalid @enderror" required>
+                                    <option value="">Select a tenant</option>
+                                    @foreach ($tenants as $tenant)
+                                    <option value="{{ $tenant->tenant_id }}">{{ $tenant->tenant_name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('tenant_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="room_number" class="fw-bold text-dark">Room Number</label>
+                                <input type="text" class="form-control @error('room_number') is-invalid @enderror" id="room_number" name="room_number" placeholder="Enter room number" required>
+                                @error('room_number')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="start_date" class="fw-bold text-dark">Start Date</label>
+                                <input type="date" class="form-control @error('start_date') is-invalid @enderror" id="start_date" name="start_date" required>
+                                @error('start_date')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="end_date" class="fw-bold text-dark">End Date</label>
+                                <input type="date" class="form-control @error('end_date') is-invalid @enderror" id="end_date" name="end_date" required>
+                                @error('end_date')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lease_agreement" class="fw-bold text-dark">Upload Lease Agreement (PDF)</label>
+                            <input type="file" class="form-control-file @error('lease_agreement') is-invalid @enderror" id="lease_agreement" name="lease_agreement" accept=".pdf" required>
+                            @error('lease_agreement')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Create Lease</button>
+                                <button type="button" class="btn btn-secondary ml-2" onclick="clearForm('leaseForm')"><i class="fas fa-times"></i> Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
 
         <script>

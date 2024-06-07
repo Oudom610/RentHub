@@ -6,64 +6,78 @@
 
     <!-- Main Content Area -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
-    {{-- <main class="p-4 sm:p-6 lg:p-8"> --}}
+        
         <!-- Form Container -->
-        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 lg:p-8">
-            <!-- Form Title -->
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Register New Tenant</h2>
-            
-            @if ($errors->any())
-            <div style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-            @endif
-            
-            <form class="w-full max-w-lg" id="registrationForm" method="POST" action="{{ route('tenant.register.submit') }}">
-                @csrf
-                <div class="flex flex-wrap -mx-3 mb-6">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-2 mb-2">
-                            Name
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="tenant_name" type="text" placeholder="Enter tenant name" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mt-2 mb-2">
-                            Email
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="email" type="email" placeholder="Enter tenant email" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Contact Information
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" name="contact_info" type="text" placeholder="Enter contact information" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Login Password
-                        </label>
-                        <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="password" type="password" placeholder="Enter login password" required>
-                    </div>
-
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <!-- Submit button -->
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" style="background-color: #3f87e5;">
-                            Submit
-                        </button>
-                        <!-- Cancel button -->
-                        <button class="bg-gray-500 hover:bg-gray-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2" type="button" onclick="clearForm('registrationForm')">
-                            Cancel
-                        </button>
-                    </div>
-                    
+        <div class="container mt-5">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary">
+                    <h2 class="mb-0 text-white"><i class="fas fa-user-plus text-white"></i> Register New Tenant</h2>
                 </div>
-            </form>  
+                <div class="card-body">
+                    @if ($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
+
+                    <form id="registrationForm" method="POST" action="{{ route('tenant.register.submit') }}">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="tenant_name" class="fw-bold text-dark">Name</label>
+                                <input type="text" class="form-control @error('tenant_name') is-invalid @enderror" id="tenant_name" name="tenant_name" placeholder="Enter tenant name" required>
+                                @error('tenant_name')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="email" class="fw-bold text-dark">Email</label>
+                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Enter tenant email" required>
+                                @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="contact_info" class="fw-bold text-dark">Contact Information</label>
+                                <input type="text" class="form-control @error('contact_info') is-invalid @enderror" id="contact_info" name="contact_info" placeholder="Enter contact information" required>
+                                @error('contact_info')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="password" class="fw-bold text-dark">Login Password</label>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Enter login password" required>
+                                @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Submit</button>
+                                <button type="button" class="btn btn-secondary ml-2" onclick="clearForm('registrationForm')"><i class="fas fa-times"></i> Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
+
+
     </main>
     <!-- End Main Content Area -->
 

@@ -3,164 +3,193 @@
 @section('content')
     @parent <!-- Retain master layout content -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
+        
         <!-- Check for success message -->
-        <!-- Success Message -->
         @if (session('success'))
-                <div id="flash-message" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                    {{ session('success') }}
-                </div>
+        <div id="flash-message" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         @endif
 
-        <!-- Pending Payments -->
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Pending Utility Bills</h2>
-        <table class="min-w-full divide-y divide-gray-200 mb-10">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Date</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount ($)</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Meter Readings</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($pendingPayments as $payment)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->billing_date }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->total_amount }}</td>
-                        
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_meter_reading)
-                                @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
-                                    <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
-                                @endforeach
-                            @else
-                                N/A
-                            @endif
-                        </td>
+        <!-- Pending Utility Bills -->
+        <div class="container ">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary">
+                <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Utility Bills</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-center">Room Number</th>
+                                <th class="text-center">Tenant Name</th>
+                                <th class="text-center">Billing Date</th>
+                                <th class="text-center">Total Amount ($)</th>
+                                <th class="text-center">Proof of Meter Readings</th>
+                                <th class="text-center">Proof of Payment</th>
+                                <th class="text-center">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($pendingPayments as $payment)
+                                <tr>
+                                    <td class="text-center">{{ $payment->lease->room_number }}</td>
+                                    <td class="text-center">{{ $payment->tenant->tenant_name }}</td>
+                                    <td class="text-center">{{ $payment->billing_date }}</td>
+                                    <td class="text-center">{{ $payment->total_amount }}</td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_meter_reading)
+                                            @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
+                                                <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_utility_payment)
+                                            <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">View Proof</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="{{ route('utility.updateStatus', $payment) }}" method="POST">
+                                            @csrf
+                                            @method('PUT')
+                                            <select name="status" class="form-control" required>
+                                                <option value="pending" {{ $payment->status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                                <option value="approved" {{ $payment->status == 'approved' ? 'selected' : '' }}>Approved</option>
+                                                <option value="declined" {{ $payment->status == 'declined' ? 'selected' : '' }}>Declined</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm mt-2" style="white-space: nowrap;"><i class="fas fa-check"></i> Update Status</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted">No pending utility bills found!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_utility_payment)
-                                <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">Click Here to View Payment Proof</a>
-                            @else
-                                N/A
-                            @endif
-                        </td>
+        <!-- Approved Utility Bills -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary">
+                <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Utility Bills</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-center">Room Number</th>
+                                <th class="text-center">Tenant Name</th>
+                                <th class="text-center">Billing Date</th>
+                                <th class="text-center">Total Amount ($)</th>
+                                <th class="text-center">Proof of Meter Readings</th>
+                                <th class="text-center">Proof of Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($approvedPayments as $payment)
+                                <tr>
+                                    <td class="text-center">{{ $payment->lease->room_number }}</td>
+                                    <td class="text-center">{{ $payment->tenant->tenant_name }}</td>
+                                    <td class="text-center">{{ $payment->billing_date }}</td>
+                                    <td class="text-center">{{ $payment->total_amount }}</td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_meter_reading)
+                                            @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
+                                                <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_utility_payment)
+                                            <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">View Proof</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No approved utility bills found!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            <form action="{{ route('utility.updateStatus', $payment) }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <select name="status" class="block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4" required>
-                                    <option value="pending" {{ $payment->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                                    <option value="approved" {{ $payment->status == 'approved' ? 'selected' : '' }}>Approved</option>
-                                    <option value="declined" {{ $payment->status == 'declined' ? 'selected' : '' }}>Declined</option>
-                                </select>
-                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2" style="background-color: #3f87e5;">Update Status</button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No pending utility bills found!</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <!-- Declined Utility Bills -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary">
+                <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Utility Bills</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-center">Room Number</th>
+                                <th class="text-center">Tenant Name</th>
+                                <th class="text-center">Billing Date</th>
+                                <th class="text-center">Total Amount ($)</th>
+                                <th class="text-center">Proof of Meter Readings</th>
+                                <th class="text-center">Proof of Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($declinedPayments as $payment)
+                                <tr>
+                                    <td class="text-center">{{ $payment->lease->room_number }}</td>
+                                    <td class="text-center">{{ $payment->tenant->tenant_name }}</td>
+                                    <td class="text-center">{{ $payment->billing_date }}</td>
+                                    <td class="text-center">{{ $payment->total_amount }}</td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_meter_reading)
+                                            @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
+                                                <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
+                                        @if ($payment->proof_of_utility_payment)
+                                            <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">View Proof</a>
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center text-muted">No declined utility bills found!</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
 
-        <!-- Approved Payments -->
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Approved Utility Bills</h2>
-        <table class="min-w-full divide-y divide-gray-200 mb-10">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Date</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount ($)</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Meter Readings</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($approvedPayments as $payment)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->billing_date }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->total_amount }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_meter_reading)
-                                @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
-                                    <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
-                                @endforeach
-                            @else
-                                N/A
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_utility_payment)
-                                <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">Click Here to View Payment Proof</a>
-                            @else
-                                N/A
-                            @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No approved utility bills found!</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
 
-        <!-- Declined Payments -->
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Declined Utility Bills</h2>
-        <table class="min-w-full divide-y divide-gray -200 mb-10">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Room Number</th>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">Tenant Name</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Billing Date</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Total Amount ($)</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Meter Readings</th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Proof of Payment</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($declinedPayments as $payment)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->lease->room_number }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $payment->tenant->tenant_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->billing_date }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">{{ $payment->total_amount }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_meter_reading)
-                                @foreach (json_decode($payment->proof_of_meter_reading) as $proof)
-                                    <a href="{{ asset('storage/' . $proof) }}" target="_blank">View</a><br>
-                                @endforeach
-                            @else
-                                N/A
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900">
-                            @if ($payment->proof_of_utility_payment)
-                                <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">Click Here to View Payment Proof</a>
-                            @else
-                                N/A
-                            @endif
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">No declined utility bills found!</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+
         <script>
             // Hide the flash message after 2 seconds
             setTimeout(function() {

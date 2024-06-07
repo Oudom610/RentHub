@@ -3,61 +3,89 @@
 @section('content')
     @parent <!-- Retain master layout content -->
     <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
-        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6 lg:p-8">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">Edit Lease</h2>
-            
+        
+        <!-- Form Container -->
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary">
+            <h2 class="mb-0 text-white"><i class="fas fa-edit text-white"></i> Edit Lease</h2>
+        </div>
+        <div class="card-body">
+            <!-- Error Messages -->
             @if ($errors->any())
-                <div style="background-color: #fed7d7; border-color: #f5a094; color: #c53030; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                    <ul>
+                <div class="alert alert-danger" role="alert">
+                    <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
                 </div>
             @endif
-            
-            <form class="w-full max-w-lg" method="POST" action="{{ route('leases.update', $lease) }}" enctype="multipart/form-data">
+
+            <!-- Edit Lease Form -->
+            <form id="editLeaseForm" method="POST" action="{{ route('leases.update', $lease) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div class="flex flex-wrap -mx-3 mb-6">
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Tenant
-                        </label>
-                        <input type="text" class="form-input rounded-md shadow-sm mt-1 block w-full" value="{{ $lease->tenant->tenant_name }}" readonly>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="tenantName" class="fw-bold text-dark">Tenant</label>
+                        <input type="text" id="tenantName" class="form-control" value="{{ $lease->tenant->tenant_name }}" readonly>
                     </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-3">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Room Number
-                        </label>
-                        <input type="number" class="form-input rounded-md shadow-sm mt-1 block w-full" name="room_number" value="{{ $lease->room_number }}" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Start Date
-                        </label>
-                        <input type="date" class="form-input rounded-md shadow-sm mt-1 block w-full" name="start_date" value="{{ $lease->start_date }}" required>
-                    </div>
-                    <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            End Date
-                        </label>
-                        <input type="date" class="form-input rounded-md shadow-sm mt-1 block w-full" name="end_date" value="{{ $lease->end_date }}" required>
-                    </div>
-                    <div class="w-full px-3 mb-6 md:mb-0">
-                        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
-                            Lease Agreement (PDF)
-                        </label>
-                        <input type="file" class="form-input rounded-md shadow-sm mt-1 block w-full" name="lease_agreement">
+                    <div class="form-group col-md-6">
+                        <label for="roomNumber" class="fw-bold text-dark">Room Number</label>
+                        <input type="text" id="roomNumber" class="form-control @error('room_number') is-invalid @enderror" name="room_number" value="{{ $lease->room_number }}" required>
+                        @error('room_number')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                 </div>
-                <div class="w-full px-3 mb-6 md:mb-0">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" style="background-color: #3f87e5;">
-                        Update Lease
-                    </button>
-                    <a href="/leases" class="bg-gray-500 hover:bg-gray-700 text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2">Cancel</a>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="startDate" class="fw-bold text-dark">Start Date</label>
+                        <input type="date" id="startDate" class="form-control @error('start_date') is-invalid @enderror" name="start_date" value="{{ $lease->start_date }}" required>
+                        @error('start_date')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="endDate" class="fw-bold text-dark">End Date</label>
+                        <input type="date" id="endDate" class="form-control @error('end_date') is-invalid @enderror" name="end_date" value="{{ $lease->end_date }}" required>
+                        @error('end_date')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="leaseAgreement" class="fw-bold text-dark">Lease Agreement (PDF)</label>
+                    <input type="file" id="leaseAgreement" class="form-control-file @error('lease_agreement') is-invalid @enderror" name="lease_agreement" accept=".pdf">
+                    @if ($lease->lease_agreement)
+                        <small class="form-text text-muted">Current Lease Agreement: <a href="{{ asset('storage/' . $lease->lease_agreement) }}" target="_blank">{{ basename($lease->lease_agreement) }}</a></small>
+                    @endif
+                    @error('lease_agreement')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-check"></i> Update Lease</button>
+                        <a href="/leases" class="btn btn-secondary ml-2"><i class="fas fa-times"></i> Cancel</a>
+                    </div>
                 </div>
             </form>
         </div>
+    </div>
+</div>
+
+
+        
+
     </main>
 @endsection

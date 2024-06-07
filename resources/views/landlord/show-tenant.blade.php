@@ -6,75 +6,57 @@
 
         <!-- Success Message -->
         @if (session('success'))
-            <div id="flash-message" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724; padding: 0.75rem; border-width: 1px; border-style: solid; border-radius: 0.375rem;" role="alert">
-                {{ session('success') }}
-            </div>
+        <div id="flash-message" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> {{ session('success') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
         @endif
 
-        <!-- @if (session('success'))
-            <div id="flash-message" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                <strong class="font-bold">Success!</strong>
-                <span class="block sm:inline">{{ session('success') }}</span>
-                <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onclick="document.getElementById('flash-message').style.display='none';">
-                    <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <title>Close</title>
-                        <path d="M14.348 5.652a.5.5 0 010 .707L10.707 10l3.641 3.641a.5.5 0 01-.707.707L10 10.707l-3.641 3.641a.5.5 0 01-.707-.707L9.293 10 5.652 6.359a.5.5 0 01.707-.707L10 9.293l3.641-3.641a.5.5 0 01.707 0z"/>
-                    </svg>
-                </span>
+        <!-- Tenants Table -->
+        <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary">
+                <h2 class="mb-0 text-white"><i class="fas fa-users text-white"></i> Tenants</h2>
             </div>
-        @endif -->
-        <table class=" min-w-full divide-y divide-gray-200">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 bg-gray-50 text-xs text-center font-medium text-gray-500 uppercase tracking-wider">
-                        Tenant Name
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Email
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Contact Info
-                    </th>
-                    <th class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Action
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-                @forelse ($tenants as $tenant)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $tenant->tenant_name }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $tenant->email }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            {{ $tenant->contact_info }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                            <!-- <a href="#" class="text-blue-600 hover:text-blue-800">
-                                View
-                            </a> -->
-                            <span class="mx-2">|</span>
-                            <form action="{{ route('tenant.destroy', ['tenant_id' => $tenant->tenant_id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
-                            There are no tenants!
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th class="text-center">Tenant Name</th>
+                            <th class="text-center">Email</th>
+                            <th class="text-center">Contact Info</th>
+                            <th class="text-center">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($tenants as $tenant)
+                            <tr>
+                                <td class="text-center">{{ $tenant->tenant_name }}</td>
+                                <td class="text-center">{{ $tenant->email }}</td>
+                                <td class="text-center">{{ $tenant->contact_info }}</td>
+                                <td class="text-center">
+                                    <form action="{{ route('tenant.destroy', ['tenant_id' => $tenant->tenant_id]) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">There are no tenants!</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
 
         <!-- Pagination Links -->
         <div class="mt-4">
