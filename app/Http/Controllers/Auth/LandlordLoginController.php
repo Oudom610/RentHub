@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Landlord;
+use App\Models\Utility_bills;
 use App\Models\Lease;
 use App\Models\Tenant;
 use App\Models\RentPayment;
@@ -34,26 +35,38 @@ class LandlordLoginController extends Controller
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput();
     }
 
-    // New method to handle the dashboard rendering
     public function dashboard()
     {
         if (Auth::guard('landlord')->check()) {
             $landlord = Auth::guard('landlord')->user();
-            
+
             // Fetch the required data for the dashboard
             $totalTenants = Tenant::where('landlord_id', $landlord->id)->count();
             $activeLeases = Lease::where('landlord_id', $landlord->id)->where('end_date', '>=', now())->count();
-            $pendingPayments = RentPayment::whereHas('lease', function($query) use ($landlord) {
+            $pendingRentPayments = RentPayment::whereHas('lease', function($query) use ($landlord) {
+                $query->where('landlord_id', $landlord->id);
+            })->where('status', 'pending')->count();
+            $pendingUtilityPayments = Utility_bills::whereHas('lease', function($query) use ($landlord) {
                 $query->where('landlord_id', $landlord->id);
             })->where('status', 'pending')->count();
 
-            // Fetch recent pending payments
-            $recentPendingPayments = RentPayment::with('tenant', 'lease')
+            // Fetch recent pending rent payments
+            $recentPendingRentPayments = RentPayment::with('tenant', 'lease')
                 ->whereHas('lease', function($query) use ($landlord) {
                     $query->where('landlord_id', $landlord->id);
                 })
                 ->where('status', 'pending')
                 ->orderBy('payment_date', 'desc')
+                ->limit(5)
+                ->get();
+
+            // Fetch recent pending utility payments
+            $recentPendingUtilityPayments = Utility_bills::with('tenant', 'lease')
+                ->whereHas('lease', function($query) use ($landlord) {
+                    $query->where('landlord_id', $landlord->id);
+                })
+                ->where('status', 'pending')
+                ->orderBy('billing_date', 'desc')
                 ->limit(5)
                 ->get();
 
@@ -64,11 +77,12 @@ class LandlordLoginController extends Controller
                 ->orderBy('end_date', 'asc')
                 ->get();
 
-            return view('landlord.home-dashboard', compact('totalTenants', 'activeLeases', 'pendingPayments', 'recentPendingPayments', 'upcomingLeaseExpirations', 'landlord'));
+            return view('landlord.home-dashboard', compact('totalTenants', 'activeLeases', 'pendingRentPayments', 'pendingUtilityPayments', 'recentPendingRentPayments', 'recentPendingUtilityPayments', 'upcomingLeaseExpirations', 'landlord'));
         } else {
             return redirect()->route('login-landlord');
         }
     }
+
 
     public function logout()
     {
