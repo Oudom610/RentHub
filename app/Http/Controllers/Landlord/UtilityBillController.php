@@ -16,6 +16,22 @@ use App\Http\Controllers\Controller;
 
 class UtilityBillController extends Controller
 {
+    // Fetch Data
+    public function index()
+    {
+
+        // Fetch utility payments based on their status
+        $pendingPayments = Utility_bills::with('lease', 'tenant')->where('status', 'pending')->get();
+        $approvedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'approved')->get();
+        $declinedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'declined')->get();
+
+        $landlord = Auth::guard('landlord')->user();
+        $tenants = Tenant::where('landlord_id', $landlord->id)->get();
+
+        return view('landlord.show-utility', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'landlord', 'tenants'));
+    }
+
+
     public function create()
     {
         $landlord = Auth::guard('landlord')->user();
@@ -34,6 +50,7 @@ class UtilityBillController extends Controller
         return view('landlord.create-utility', compact('tenantsWithActiveLeases', 'landlord'));
     }
 
+    // Store Function Start
     private $utilityRates = [
         'electricity' => 0.375,
         'water' => 0.5,
@@ -96,7 +113,7 @@ class UtilityBillController extends Controller
         }
 
 
-        // Create the rent payment only if an active lease is found
+        // Create the utility payment only if an active lease is found
         $utilityBill = Utility_bills::create([
             'lease_id' => $activeLease->lease_id, // Use 'lease_id' instead of 'id'
             'tenant_id' => $tenantId,
@@ -133,4 +150,22 @@ class UtilityBillController extends Controller
 
         return $usage * $rate;
     }
+    // Store Function End
+
+    // Update Status
+    public function updateStatus(Request $request, Utility_bills $utility_billsPayment)
+    {
+        // Validate the request data
+        $request->validate([
+            'status' => 'required|in:pending,approved,declined',
+        ]);
+
+        // Update the status
+        $utility_billsPayment->status = $request->status;
+        $utility_billsPayment->save();
+
+        return redirect()->route('utility.index')->with('success', 'Rent payment status updated successfully.');
+    }
+
+
 }

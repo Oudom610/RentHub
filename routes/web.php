@@ -114,6 +114,8 @@ Route::middleware(['landlord.auth'])->group(function () {
     //Utility Bill stuff
     Route::get('/utility/create', [UtilityBillController::class, 'create'])->name('utility.create');
     Route::post('/utility', [UtilityBillController::class, 'store'])->name('utility.store');
+    Route::get('/utility', [UtilityBillController::class, 'index'])->name('utility.index');
+    Route::put('/utility/{utility_billsPayment}/updateStatus', [UtilityBillController::class, 'updateStatus'])->name('utility.updateStatus');
 
 });
 
