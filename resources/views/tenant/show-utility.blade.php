@@ -120,8 +120,8 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($payment->proof_of_payment)
-                                                <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">View Proof</a>
+                                            @if($payment->proof_of_utility_payment)
+                                                <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">View Proof</a>
                                             @else
                                                 N/A
                                             @endif
@@ -172,8 +172,8 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            @if($payment->proof_of_payment)
-                                                <a href="{{ asset('storage/' . $payment->proof_of_payment) }}" target="_blank">View Proof</a>
+                                            @if($payment->proof_of_utility_payment)
+                                                <a href="{{ asset('storage/' . $payment->proof_of_utility_payment) }}" target="_blank">View Proof</a>
                                             @else
                                                 N/A
                                             @endif
