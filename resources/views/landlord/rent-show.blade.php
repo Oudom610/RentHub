@@ -18,7 +18,7 @@
         <div class="container">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -74,7 +74,7 @@
             <!-- Approved Payments -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -117,7 +117,7 @@
             <!-- Declined Payments -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

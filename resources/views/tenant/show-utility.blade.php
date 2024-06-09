@@ -29,25 +29,25 @@
         <div class="container">
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Utility Bills</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th class="text-center">Billing Date</th>
-                                    <th class="text-center">Amount ($)</th>
-                                    <th class="text-center">Proof of Reading Meter</th>
-                                    <th class="text-center">Proof of Payment</th>
+                                    <th class="text-center" style="white-space: nowrap;">Billing Date</th>
+                                    <th class="text-center" style="white-space: nowrap;">Amount ($)</th>
+                                    <th class="text-center" >Proof of Meter Reading</th>
+                                    <th class="text-center" >Proof of Payment</th>
                                     <th class="text-center">Status</th>
-                                    <th class="text-center">Upload Payment Proof</th>
+                                    <th class="text-center" >Upload Payment Proof</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse ($pendingPayments as $payment)
                                     <tr>
-                                        <td class="text-center">{{ $payment->billing_date }}</td>
+                                        <td class="text-center" style="white-space: nowrap;">{{ $payment->billing_date }}</td>
                                         <td class="text-center">{{ $payment->total_amount }}</td>
                                         <td class="text-center">
                                             @if ($payment->proof_of_meter_reading)
@@ -66,11 +66,11 @@
                                             @endif
                                         </td>
                                         <td class="text-center">{{ ucfirst($payment->status) }}</td>
-                                        <td class="text-center">
+                                        <td class="text-center" style="white-space: nowrap;">
                                             <form action="{{ route('tenant.uploadUtilityProof', $payment->utility_bill_id) }}" method="POST" enctype="multipart/form-data" class="inline-block flex items-center justify-center space-x-2">
                                                 @csrf
                                                 <input type="file" name="proof_of_payment" accept="application/pdf, image/png, image/jpeg, image/jpg" required class="w-32 md:w-48 lg:w-64">
-                                                <button class="btn btn-primary btn-sm" style="white-space: nowrap;">
+                                                <button class="btn btn-primary btn-sm">
                                                     <i class="fas fa-upload"></i> Upload
                                                 </button>
                                             </form>
@@ -91,7 +91,7 @@
             <!-- Approved Payments -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Utility Bills</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -100,7 +100,7 @@
                                 <tr>
                                     <th class="text-center">Billing Date</th>
                                     <th class="text-center">Amount ($)</th>
-                                    <th class="text-center">Proof of Reading Meter</th>
+                                    <th class="text-center">Proof of Meter Reading</th>
                                     <th class="text-center">Proof of Payment</th>
                                     <th class="text-center">Status</th>
                                 </tr>
@@ -108,7 +108,7 @@
                             <tbody>
                                 @forelse ($approvedPayments as $payment)
                                     <tr>
-                                        <td class="text-center">{{ $payment->billing_date }}</td>
+                                        <td class="text-center" style="white-space: nowrap;">{{ $payment->billing_date }}</td>
                                         <td class="text-center">{{ $payment->total_amount }}</td>
                                         <td class="text-center">
                                             @if ($payment->proof_of_meter_reading)
@@ -142,16 +142,16 @@
             <!-- Declined Payments -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Payments</h2>
+                    <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Utility Bills</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover">
                             <thead class="thead-dark">
                                 <tr>
-                                    <th class="text-center">Billing Date</th>
+                                    <th class="text-center" style="white-space: nowrap;">Billing Date</th>
                                     <th class="text-center">Amount ($)</th>
-                                    <th class="text-center">Proof of Reading Meter</th>
+                                    <th class="text-center">Proof of Meter Reading</th>
                                     <th class="text-center">Proof of Payment</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Upload Payment Proof</th>

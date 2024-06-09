@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Models\Tenant;
 use App\Models\Lease;
 use App\Models\RentPayment;
+use App\Models\Utility_bills;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -137,7 +138,7 @@ class TenantController extends Controller
         $upcomingLeaseExpiration = $currentLease;
     }
 
-    // Fetch pending rent payments
+    // Fetch pending rent payments without proof of payment
     $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)
         ->where('status', 'pending')
         ->whereNull('proof_of_payment')
@@ -146,8 +147,18 @@ class TenantController extends Controller
     // Fetch declined rent payments
     $declinedRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
 
-    return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPayments', 'declinedRentPayments', 'upcomingLeaseExpiration'));
+    // Fetch pending utility bills without proof of payment
+    $pendingUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)
+        ->where('status', 'pending')
+        ->whereNull('proof_of_utility_payment')
+        ->get();
+
+    // Fetch declined utility bills
+    $declinedUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
+
+    return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPayments', 'declinedRentPayments', 'pendingUtilityPayments', 'declinedUtilityPayments', 'upcomingLeaseExpiration'));
 }
+
 
 
     public function logout()

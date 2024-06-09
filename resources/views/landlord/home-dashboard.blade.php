@@ -85,7 +85,7 @@
         
         <div class="card mb-4">
             <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-money-bill-wave"></i> Pending Rent</span>
+                <span><i class="fas fa-money-bill-wave"></i> Pending Rent Payments</span>
                 {{-- @if ($pendingRentPayments > 0) --}}
                     <a href="{{ route('rent.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Rent</a>
                 {{-- @endif --}}
@@ -122,7 +122,7 @@
 
         <div class="card mb-4">
             <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-file-invoice-dollar"></i> Pending Utility</span>
+                <span><i class="fas fa-file-invoice-dollar"></i> Pending Utility Bills</span>
                 {{-- @if ($pendingUtilityPayments > 0) --}}
                     <a href="{{ route('utility.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Utility</a>
                 {{-- @endif --}}
