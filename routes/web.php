@@ -58,6 +58,11 @@ Route::middleware(['tenant.auth'])->group(function () {
     Route::get('/tenant/rent', [RentController::class, 'showRent'])->name('tenant.showRent');
     Route::post('/tenant/rent/upload-proof/{rentPaymentId}', [RentController::class, 'uploadProof'])->name('tenant.uploadProof');
 
+    // View utility
+    //View rent
+    Route::get('/tenant/utility', [UtilityBillController::class, 'showUtility'])->name('tenant.showUtility');
+    Route::post('/tenant/utility/upload-proof/{utility_bill_id}', [UtilityBillController::class, 'uploadProof'])->name('tenant.uploadUtilityProof');
+
 });
 
 

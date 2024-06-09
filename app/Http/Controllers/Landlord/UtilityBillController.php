@@ -164,8 +164,42 @@ class UtilityBillController extends Controller
         $utility_billsPayment->status = $request->status;
         $utility_billsPayment->save();
 
-        return redirect()->route('utility.index')->with('success', 'Rent payment status updated successfully.');
+        return redirect()->route('utility.index')->with('success', 'Utility payment status updated successfully.');
     }
+
+    // Tenant
+    public function showUtility()
+    {
+        $tenant = Auth::guard('tenants')->user();
+        
+        $pendingPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->get();
+        $approvedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->get();
+        $declinedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->get();
+
+        return view('tenant.show-utility', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'tenant'));
+    }
+
+    public function uploadProof(Request $request, $utility_bill_id)
+    {
+        $request->validate([
+            'proof_of_payment' => 'required|mimes:pdf,png,jpg,jpeg|max:2048',
+        ]);
+
+        $utility_bills = Utility_bills::findOrFail($utility_bill_id);
+
+        if ($request->hasFile('proof_of_payment')) {
+            // Store the file
+            $path = $request->file('proof_of_payment')->store('proof_of_utility_payments', 'public');
+            $utility_bills->proof_of_utility_payment = $path;
+            $utility_bills->status = 'pending'; // Set status to pending after re-upload
+            $utility_bills->save();
+
+            return redirect()->back()->with('success', 'Proof of payment uploaded successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Failed to upload proof of payment.');
+    }
+
 
 
 }

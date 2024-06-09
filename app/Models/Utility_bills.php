@@ -18,7 +18,7 @@ class Utility_bills extends Model
         'utilities',
         'total_amount',
         'proof_of_meter_reading',
-        'proof_of_payment',
+        'proof_of_utility_payment',
         'status',
     ];
 

@@ -64,6 +64,15 @@
         </div>
         </div>
 
+        <script>
+            // Hide the flash message after 2 seconds
+            setTimeout(function() {
+                var flashMessage = document.getElementById('flash-message');
+                if (flashMessage) {
+                    flashMessage.style.display = 'none';
+                }
+            }, 2000); // 2000 milliseconds = 2 seconds
+        </script>
 
 
     </main>

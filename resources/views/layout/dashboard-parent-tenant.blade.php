@@ -51,8 +51,7 @@
                         <i class="fas fa-caret-down ml-auto"></i>
                     </a>
                     <ul class="hidden">
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">aa</a></li>
-                        <li><a href="#" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">aa</a></li>
+                        <li><a href="/tenant/utility" class="py-2.7 text-sm my-0 mx-4 flex items-center whitespace-nowrap px-4 text-white">My Utility</a></li>
                     </ul>
                 </li>
                 <li class="w-full mt-4">

@@ -16,14 +16,14 @@
                 <div class="card-body">
                     <!-- Success Message -->
                     @if (session('success'))
-                    <div class="alert alert-success" role="alert">
+                    <div id="flash-message"  class="alert alert-success" role="alert">
                         {{ session('success') }}
                     </div>
                     @endif
 
                     <!-- Error Messages -->
                     @if ($errors->any())
-                    <div class="alert alert-danger" role="alert">
+                    <div id="flash-message" class="alert alert-danger" role="alert">
                         <ul class="mb-0">
                             @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
