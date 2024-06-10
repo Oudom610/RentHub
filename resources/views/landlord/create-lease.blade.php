@@ -80,7 +80,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="lease_agreement" class="fw-bold text-dark">Upload Lease Agreement (PDF)</label>
+                            <label for="lease_agreement" class="fw-bold text-dark">Upload Lease Agreement <span class="small">(PDF, max 2MB)</span></label>
                             <input type="file" class="form-control-file @error('lease_agreement') is-invalid @enderror" id="lease_agreement" name="lease_agreement" accept=".pdf" required>
                             @error('lease_agreement')
                             <div class="invalid-feedback">

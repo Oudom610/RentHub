@@ -8,57 +8,57 @@
         <!-- Summary Cards -->
         <div class="row mb-4">
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm border-primary">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-users text-primary"></i> Total Tenants</h5>
-                        <p class="card-text display-4">{{ $totalTenants }}</p>
+                        <p class="card-text display-4 text-primary">{{ $totalTenants }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm border-success">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-file-signature text-primary"></i> Active Leases</h5>
-                        <p class="card-text display-4">{{ $activeLeases }}</p>
+                        <h5 class="card-title"><i class="fas fa-file-signature text-success"></i> Active Leases</h5>
+                        <p class="card-text display-4 text-success">{{ $activeLeases }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm border-warning">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-money-bill-wave text-primary"></i> Pending Rent</h5>
-                        <p class="card-text display-4">{{ $pendingRentPayments }}</p>
+                        <h5 class="card-title"><i class="fas fa-money-bill-wave text-warning"></i> Pending Rent</h5>
+                        <p class="card-text display-4 text-warning">{{ $pendingRentPayments }}</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card shadow-sm">
+                <div class="card shadow-sm border-danger">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-file-invoice-dollar text-primary"></i> Pending Utility</h5>
-                        <p class="card-text display-4">{{ $pendingUtilityPayments }}</p>
+                        <h5 class="card-title"><i class="fas fa-file-invoice-dollar text-danger"></i> Pending Utility</h5>
+                        <p class="card-text display-4 text-danger">{{ $pendingUtilityPayments }}</p>
                     </div>
                 </div>
             </div>
         </div>
-    
+
         <!-- Quick Actions -->
         <div class="d-flex justify-content-between mb-4">
             <a href="{{ route('tenant.register') }}" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register New Tenant</a>
-            <a href="{{ route('leases.create') }}" class="btn btn-primary"><i class="fas fa-file-contract"></i> Create New Lease</a>
-            <a href="{{ route('rent.create') }}" class="btn btn-primary"><i class="fas fa-money-check-alt"></i> Add New Rent Entry</a>
-            <a href="{{ route('utility.create') }}" class="btn btn-primary"><i class="fas fa-file-invoice"></i> Add New Utility Bill</a>
+            <a href="{{ route('leases.create') }}" class="btn btn-success"><i class="fas fa-file-contract"></i> Create New Lease</a>
+            <a href="{{ route('rent.create') }}" class="btn btn-warning"><i class="fas fa-money-check-alt"></i> Add New Rent Entry</a>
+            <a href="{{ route('utility.create') }}" class="btn btn-danger"><i class="fas fa-file-invoice"></i> Add New Utility Bill</a>
         </div>
-    
+
         <!-- Summary Tables -->
         <div class="card mb-4">
             <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-calendar-alt"></i> Upcoming Lease Expirations</span>
+                <span><i class="fas fa-calendar-alt"></i> <strong>Upcoming Lease Expirations (Within 1 Month)</strong></span>
                 <a href="{{ route('leases.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Lease</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Tenant Name</th>
                                 <th>Room Number</th>
@@ -82,18 +82,16 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-money-bill-wave"></i> Pending Rent Payments</span>
-                {{-- @if ($pendingRentPayments > 0) --}}
-                    <a href="{{ route('rent.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Rent</a>
-                {{-- @endif --}}
+            <div class="card-header bg-warning text-dark d-flex justify-content-between">
+                <span><i class="fas fa-money-bill-wave"></i><strong> Pending Rent Payments</strong></span>
+                <a href="{{ route('rent.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Rent</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Tenant Name</th>
                                 <th>Room Number</th>
@@ -121,16 +119,14 @@
         </div>
 
         <div class="card mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between">
-                <span><i class="fas fa-file-invoice-dollar"></i> Pending Utility Bills</span>
-                {{-- @if ($pendingUtilityPayments > 0) --}}
-                    <a href="{{ route('utility.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Utility</a>
-                {{-- @endif --}}
+            <div class="card-header bg-danger text-white d-flex justify-content-between">
+                <span><i class="fas fa-file-invoice-dollar"></i> <strong> Pending Utility Bills</strong></span>
+                <a href="{{ route('utility.index') }}" class="btn btn-light"><i class="fas fa-arrow-right"></i> Go to Utility</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="thead-light">
+                    <table class="table table-striped table-hover">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Tenant Name</th>
                                 <th>Room Number</th>
@@ -156,6 +152,7 @@
                 </div>
             </div>
         </div>
+
 
         
     </main>

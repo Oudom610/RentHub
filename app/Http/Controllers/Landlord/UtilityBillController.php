@@ -63,7 +63,7 @@ class UtilityBillController extends Controller
             'tenant_name' => 'required|exists:tenants,tenant_name',
             'billing_date' => 'required|date',
             'utilities' => 'required|array',
-            'proof_of_meter_readings.*' => 'required|file|mimes:jpeg,png,pdf|max:2048',
+            'proof_of_meter_readings.*' => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048',
             'proof_of_utility_payment' => 'nullable|string',
             'status' => 'nullable|in:pending,approved,declined',
         ]);
@@ -130,7 +130,7 @@ class UtilityBillController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to create rent payment.']);
         }
 
-        return redirect()->route('utility.create')->with('success', 'Rent payment added successfully.');
+        return redirect()->route('utility.create')->with('success', 'Utility bill added successfully.');
     }
     private function calculateAmount($type, $previousMeterReading, $currentMeterReading)
     {

@@ -101,7 +101,7 @@
                             </div>
 
                             <div class="form-group col-md-12">
-                                <label for="proof_of_meter_readings" class="fw-bold text-dark">Upload Proof of Meter Readings</label>
+                                <label for="proof_of_meter_readings" class="fw-bold text-dark">Upload Proof of Meter Readings <span class="small">(JPEG, JPG, PNG, PDF, total max 2MB)</span></label>
                                 <input type="file" class="form-control-file @error('proof_of_meter_readings.*') is-invalid @enderror" id="proof_of_meter_readings" name="proof_of_meter_readings[]" multiple required>
                                 @error('proof_of_meter_readings.*')
                                 <div class="invalid-feedback">

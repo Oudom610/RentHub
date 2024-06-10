@@ -18,12 +18,12 @@
         <!-- Pending Payments -->
         <div class="container">
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary">
-                    <h2 class="mb-0 text-white"><i class="fas fa-hourglass-half text-white"></i> Pending Rent Payments</h2>
+                <div class="card-header bg-warning">
+                    <h2 class="mb-0 text-dark"><i class="fas fa-hourglass-half text-dark"></i> Pending Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center">Rent Due Date</th>
@@ -67,12 +67,12 @@
         
             <!-- Approved Payments -->
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary">
+                <div class="card-header bg-success">
                     <h2 class="mb-0 text-white"><i class="fas fa-check-circle text-white"></i> Approved Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center">Rent Due Date</th>
@@ -108,12 +108,12 @@
         
             <!-- Declined Payments -->
             <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary">
+                <div class="card-header bg-danger">
                     <h2 class="mb-0 text-white"><i class="fas fa-times-circle text-white"></i> Declined Rent Payments</h2>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
+                        <table class="table table-striped table-hover">
                             <thead class="thead-dark">
                                 <tr>
                                     <th class="text-center">Rent Due Date</th>

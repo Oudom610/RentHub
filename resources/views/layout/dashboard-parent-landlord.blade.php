@@ -95,7 +95,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <div class="d-flex justify-content-between w-100 align-items-center">
-                <nav aria-label="breadcrumb" class="mb-2">
+                {{-- <nav aria-label="breadcrumb" class="mb-2">
                     <!-- breadcrumb -->
                     <ol class="breadcrumb pt-3 bg-transparent rounded-lg mb-0" style="margin-bottom: 0 !important;">
                         <li class="breadcrumb-item">
@@ -103,9 +103,9 @@
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                     </ol>
-                </nav>
+                </nav> --}}
 
-                <ul class="navbar-nav ml-auto d-flex align-items-center">
+                <ul class="navbar-nav ml-auto d-flex align-items-center mt-2">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="{{ $landlord->profile_picture ? asset('storage/' . $landlord->profile_picture) : asset('assets/img/default-icon.png') }}" alt="Profile Picture" class="w-8 h-8 rounded-full mr-2" />
