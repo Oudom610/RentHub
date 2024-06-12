@@ -92,7 +92,9 @@ Route::middleware(['landlord.auth'])->group(function () {
 
     // New route for showing all tenants, under the 'landlord.auth' middleware
     Route::get('/tenant/show', [TenantController::class, 'showAllTenant'])->name('tenant.show');
-
+    // Route for editing tenant information
+    Route::get('/tenant/{tenant}/edit', [TenantController::class, 'edit'])->name('tenant.edit');
+    Route::put('/tenant/{tenant}', [TenantController::class, 'update'])->name('tenant.update');
     // Add the delete route with a corresponding controller method
     Route::delete('/tenant/show/{tenant_id}', [TenantController::class, 'destroy'])->name('tenant.destroy');
 

@@ -37,11 +37,12 @@
                                 <td class="text-center">{{ $tenant->email }}</td>
                                 <td class="text-center">{{ $tenant->contact_info }}</td>
                                 <td class="text-center">
+                                    <a href="{{ route('tenant.edit', $tenant)}}" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Edit</a>
                                     <form action="{{ route('tenant.destroy', ['tenant_id' => $tenant->tenant_id]) }}" method="POST" class="d-inline-block" onsubmit="return confirm('Are you sure you want to delete this tenant?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="fas fa-trash-alt"></i> Delete
+                                            <i class="fas fa-trash"></i> Delete
                                         </button>
                                     </form>
                                 </td>

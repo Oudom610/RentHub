@@ -68,6 +68,30 @@ class TenantController extends Controller
         }
     }
 
+    public function edit(Tenant $tenant)
+    {
+        $landlord = Auth::guard('landlord')->user();
+        return view('landlord.edit-tenant', compact('tenant', 'landlord'));
+    }
+
+    public function update(Request $request, Tenant $tenant)
+    {
+        $request->validate([
+            'tenant_name' => 'required|string|max:50|unique:tenants,tenant_name,' . $tenant->tenant_id . ',tenant_id',
+            'email' => 'required|string|email|max:50|unique:tenants,email,' . $tenant->tenant_id . ',tenant_id',
+            'contact_info' => 'required|string|max:50',
+        ]);
+
+        $tenant->tenant_name = $request->tenant_name;
+        $tenant->email = $request->email;
+        $tenant->contact_info = $request->contact_info;
+       
+        $tenant->save();
+
+        return redirect()->route('tenant.show')->with('success', 'Tenant updated successfully!');
+    }
+
+
     // Destroy
     public function destroy($tenant_id) {
         $landlord = Auth::guard('landlord')->user();
@@ -112,53 +136,42 @@ class TenantController extends Controller
         }
     }
 
-
-
-    //middleware
-    // public function dashboard(Request $request)
-    // {
-    //     $tenant = Auth::guard('tenants')->user();
-    //     // Now you can use the $tenant variable in your view or perform any necessary operations
-    //     return view('tenant.home-dashboard', compact('tenant'));
-    // }
-
     public function dashboard()
-{
-    $tenant = Auth::guard('tenants')->user();
-    if (!$tenant) {
-        return redirect('login-tenant')->with('error', 'Please log in to continue.');
+    {
+        $tenant = Auth::guard('tenants')->user();
+        if (!$tenant) {
+            return redirect('login-tenant')->with('error', 'Please log in to continue.');
+        }
+
+        // Fetch the most recent lease
+        $currentLease = Lease::where('tenant_id', $tenant->tenant_id)->latest('start_date')->first();
+
+        // Fetch upcoming lease expirations within the next month
+        $upcomingLeaseExpiration = null;
+        if ($currentLease && $currentLease->end_date <= Carbon::now()->addMonth()) {
+            $upcomingLeaseExpiration = $currentLease;
+        }
+
+        // Fetch pending rent payments without proof of payment
+        $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)
+            ->where('status', 'pending')
+            ->whereNull('proof_of_payment')
+            ->get();
+
+        // Fetch declined rent payments
+        $declinedRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
+
+        // Fetch pending utility bills without proof of payment
+        $pendingUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)
+            ->where('status', 'pending')
+            ->whereNull('proof_of_utility_payment')
+            ->get();
+
+        // Fetch declined utility bills
+        $declinedUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
+
+        return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPayments', 'declinedRentPayments', 'pendingUtilityPayments', 'declinedUtilityPayments', 'upcomingLeaseExpiration'));
     }
-
-    // Fetch the most recent lease
-    $currentLease = Lease::where('tenant_id', $tenant->tenant_id)->latest('start_date')->first();
-
-    // Fetch upcoming lease expirations within the next month
-    $upcomingLeaseExpiration = null;
-    if ($currentLease && $currentLease->end_date <= Carbon::now()->addMonth()) {
-        $upcomingLeaseExpiration = $currentLease;
-    }
-
-    // Fetch pending rent payments without proof of payment
-    $pendingRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)
-        ->where('status', 'pending')
-        ->whereNull('proof_of_payment')
-        ->get();
-
-    // Fetch declined rent payments
-    $declinedRentPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
-
-    // Fetch pending utility bills without proof of payment
-    $pendingUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)
-        ->where('status', 'pending')
-        ->whereNull('proof_of_utility_payment')
-        ->get();
-
-    // Fetch declined utility bills
-    $declinedUtilityPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->get();
-
-    return view('tenant.home-dashboard', compact('tenant', 'currentLease', 'pendingRentPayments', 'declinedRentPayments', 'pendingUtilityPayments', 'declinedUtilityPayments', 'upcomingLeaseExpiration'));
-}
-
 
 
     public function logout()
