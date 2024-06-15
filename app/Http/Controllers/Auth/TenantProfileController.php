@@ -67,10 +67,10 @@ class TenantProfileController extends Controller
         if (in_array($field, ['tenant_name', 'email', 'contact_info'])) { // Ensure the field is allowed to be updated
             $tenant->$field = $value;
             $tenant->save();
-            return response()->json(['success' => true, 'message' => 'Profile updated successfully!']);
+            return redirect()->route('tenant.profile')->with('success', 'Profile updated successfully!');
         }
 
-        return response()->json(['success' => false, 'message' => 'Invalid field specified.']);
+        return redirect()->route('tenant.profile')->with('error', 'Invalid field specified.');
     }
 
     // Change Password
