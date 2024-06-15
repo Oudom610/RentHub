@@ -69,7 +69,7 @@ class LeaseController extends Controller
     public function index()
     {
         $landlord = Auth::guard('landlord')->user();
-        $leases = Lease::where('landlord_id', $landlord->id)->get();
+        $leases = Lease::where('landlord_id', $landlord->id)->latest()->paginate(10);
         return view('landlord.show-leases', compact('leases', 'landlord'));
     }
 

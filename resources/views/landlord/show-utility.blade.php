@@ -80,6 +80,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-end">
+                        {{ $pendingPayments->appends(['approved_page' => $approvedPayments->currentPage(), 'declined_page' => $declinedPayments->currentPage()])->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,6 +137,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-end">
+                        {{ $approvedPayments->appends(['pending_page' => $pendingPayments->currentPage(), 'declined_page' => $declinedPayments->currentPage()])->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,6 +194,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-end">
+                        {{ $declinedPayments->appends(['pending_page' => $pendingPayments->currentPage(), 'approved_page' => $approvedPayments->currentPage()])->links() }}
+                    </div>
                 </div>
             </div>
         </div>

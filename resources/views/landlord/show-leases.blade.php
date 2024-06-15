@@ -59,6 +59,10 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <!-- Pagination Links -->
+                    <div class="d-flex justify-content-end">
+                        {{ $leases->links() }}
+                    </div>
                 </div>
             </div>
         </div>

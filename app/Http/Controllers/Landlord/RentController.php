@@ -11,26 +11,34 @@ use Illuminate\Support\Facades\Auth;
 
 class RentController extends Controller
 {
+    // public function index()
+    // {
+    //     // Fetch rent payments based on their status
+    //     $pendingPayments = RentPayment::with('lease', 'tenant')->where('status', 'pending')->get();
+    //     $approvedPayments = RentPayment::with('lease', 'tenant')->where('status', 'approved')->get();
+    //     $declinedPayments = RentPayment::with('lease', 'tenant')->where('status', 'declined')->get();
+
+    //     $landlord = Auth::guard('landlord')->user();
+    //     $tenants = Tenant::where('landlord_id', $landlord->id)->get();
+
+    //     return view('landlord.rent-show', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'landlord', 'tenants'));
+    // }
+
     public function index()
     {
-        // // Fetch all rent payments with related lease and tenant information
-        // $rentPayments = RentPayment::with('lease', 'tenant')->get();
-        // $landlord = Auth::guard('landlord')->user();
-        // $tenants = Tenant::where('landlord_id', $landlord->id)->get();
-
-        // return view('landlord.rent-show', compact('rentPayments', 'landlord', 'tenants'));
-
-
-        // Fetch rent payments based on their status
-        $pendingPayments = RentPayment::with('lease', 'tenant')->where('status', 'pending')->get();
-        $approvedPayments = RentPayment::with('lease', 'tenant')->where('status', 'approved')->get();
-        $declinedPayments = RentPayment::with('lease', 'tenant')->where('status', 'declined')->get();
-
         $landlord = Auth::guard('landlord')->user();
+
+        // Fetch rent payments based on their status with pagination
+        $pendingPayments = RentPayment::with('lease', 'tenant')->where('status', 'pending')->latest()->paginate(5, ['*'], 'pending_page');
+        $approvedPayments = RentPayment::with('lease', 'tenant')->where('status', 'approved')->latest()->paginate(5, ['*'], 'approved_page');
+        $declinedPayments = RentPayment::with('lease', 'tenant')->where('status', 'declined')->latest()->paginate(5, ['*'], 'declined_page');
+
         $tenants = Tenant::where('landlord_id', $landlord->id)->get();
 
         return view('landlord.rent-show', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'landlord', 'tenants'));
     }
+
+
 
     public function create()
     {
@@ -150,9 +158,9 @@ class RentController extends Controller
     {
         $tenant = Auth::guard('tenants')->user();
         
-        $pendingPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->get();
-        $approvedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->get();
-        $declinedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->get();
+        $pendingPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'pending_page');
+        $approvedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'approved_page');
+        $declinedPayments = RentPayment::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'declined_page');
 
         return view('tenant.show-rent', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'tenant'));
     }

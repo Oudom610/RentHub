@@ -24,9 +24,9 @@ class UtilityBillController extends Controller
     public function index()
     {
         // Fetch utility payments based on their status
-        $pendingPayments = Utility_bills::with('lease', 'tenant')->where('status', 'pending')->get();
-        $approvedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'approved')->get();
-        $declinedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'declined')->get();
+        $pendingPayments = Utility_bills::with('lease', 'tenant')->where('status', 'pending')->latest()->paginate(5, ['*'], 'pending_page');
+        $approvedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'approved')->latest()->paginate(5, ['*'], 'approved_page');
+        $declinedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'declined')->latest()->paginate(5, ['*'], 'declined_page');
 
         $landlord = Auth::guard('landlord')->user();
         $tenants = Tenant::where('landlord_id', $landlord->id)->get();
@@ -185,9 +185,9 @@ class UtilityBillController extends Controller
     {
         $tenant = Auth::guard('tenants')->user();
         
-        $pendingPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->get();
-        $approvedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->get();
-        $declinedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->get();
+        $pendingPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'pending')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'pending_page');
+        $approvedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'approved')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'approved_page');
+        $declinedPayments = Utility_bills::where('tenant_id', $tenant->tenant_id)->where('status', 'declined')->with('landlord', 'lease')->latest()->paginate(5, ['*'], 'declined_page');
 
         return view('tenant.show-utility', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'tenant'));
     }
