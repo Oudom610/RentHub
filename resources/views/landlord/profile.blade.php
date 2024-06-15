@@ -1,300 +1,266 @@
 @extends('layout.dashboard-parent-landlord')
 
 @section('content')
-    @parent <!-- Retain master layout content -->
+@parent <!-- Retain master layout content -->
 
-    <style>
-    .edit-button, .upload-button, .save-button, .cancel-button, .close-button {
-        padding: 5px 20px;
-        font-weight: bold;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        outline: none;
+<head>
+    <!-- Add jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<style>
+    .profile-input {
+        display: none;
     }
 
-    .edit-button {
-        background-color: white;
-        color: rgb(34, 139, 34);
-        border: 2px solid rgb(34, 139, 34);
-    }
-
-    .edit-button:hover, .upload-button:hover, .save-button:hover, .cancel-button:hover, .close-button:hover {
+    .btn-edit {
+        background-color: #17a2b8;
         color: white;
+        border: none;
     }
 
-    .edit-button:hover {
-        background-color: rgb(34, 139, 34);
-    }
-
-    .upload-button {
-        background-color: #007BFF; /* Bootstrap primary blue */
+    .btn-save {
+        background-color: #007bff;
         color: white;
-        border: 2px solid #0056b3;
-        margin-top: 10px;
+        border: none;
     }
 
-    .upload-button:hover {
-        background-color: #0056b3; /* Darker blue for hover state */
-    }
-
-    .save-button, .cancel-button {
-        display: none; /* Initially hidden */
-        background-color: #007BFF; /* Save button blue */
-        border: 2px solid #0056b3;
+    .btn-cancel {
+        background-color: #dc3545;
         color: white;
+        border: none;
     }
 
-    .save-button:hover {
-        background-color: #0056b3; /* Darker blue for save button hover state */
-    }
-
-    .cancel-button {
-        background-color: #dc3545; /* Bootstrap danger red */
-        border: 2px solid #b02a37;
-    }
-
-    .cancel-button:hover {
-        background-color: #b02a37; /* Darker red for cancel button hover state */
-    }
-
-    .close-button {
-        background-color: #dc3545; /* Bootstrap danger red */
+    .card-header-custom {
+        background-color: #007bff;
         color: white;
-        border: 2px solid #b02a37;
-        margin-top: 10px;
+        padding: 10px;
+        font-size: 1.25rem;
+        border-bottom: 2px solid #0069d9;
     }
 
-    .close-button:hover {
-        background-color: #b02a37; /* Darker red for hover state */
-    }
-
-    .profile-card {
-        background-color: white;
-        border-radius: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    .card-body-custom {
+        background-color: #f8f9fa;
         padding: 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        max-width: 960px;
-        margin: auto;
     }
 
-    .profile-picture-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    .profile-field {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-        margin-top: 30px;
-    }
-
-    .profile-label {
-        font-weight: bold;
-        color: #666;
-        flex-grow: 1;
-        text-align: left;
-        font-size: 20px;
-    }
-
-    .profile-value {
-    width: 512px; /* Sets a fixed width */
-    text-align: center;
-    font-size: 18px;
-    display: inline-block; /* Ensures inline behavior with block properties */
-}
-
-.profile-input {
-    width: 325px; /* Adjusted width */
-    text-align: center;
-    font-size: 18px;
-    display: none; /* Remains hidden initially */
-    border: 2px solid black; /* Border color changed to black */
-    padding: 5px 10px; /* Padding for better visibility of text */
-    margin-top: 5px; /* Space above the input field */
-    box-sizing: border-box; /* Includes padding and border in the width */
-    border-radius: 5px; /* Rounded edges */
-}
-
-
-
-    img.profile-img {
-        width: 512px;
-        height: 512px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 30px;
+    .btn-space {
+        margin-right: 5px;
     }
 
     .button-container {
-        display: flex; /* This will align the buttons next to each other */
-        flex: 2;
-        width: 100%; /* Ensures the container fills the modal width */
-        justify-content: space-evenly; /* Evenly spaces the buttons within the container */
-        margin-top: 20px; /* Space above the button container */
+        display: none;
     }
 
-    .upload-button, .close-button {
-        flex: 1; /* Allows the buttons to grow and fill the flex container */
-        margin: 0 20px; /* Adds spacing between the buttons */
+    .button-container.active {
+        display: inline-flex;
+        align-items: center;
     }
 
-    
+    .info-text {
+        font-size: 1.1rem;
+        /* Adjust this size as needed */
+    }
+
+    /* Modal styling */
+    .modal-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .modal-body .form-group {
+        width: 100%;
+        text-align: center;
+    }
+
+    .modal-body .d-flex {
+        justify-content: center;
+        width: 100%;
+    }
 </style>
 
+<!-- Main Content Area -->
+<main
+    class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200 p-4 sm:p-6 lg:p-8">
     <!-- Profile Card and Modal within Main Section -->
-    <main class="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
-        <div class="profile-card">
-           <!-- Profile Picture Column -->
-           <div class="profile-picture-container">
-                @php
-$profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile_picture : 'assets/img/Default-icon.png';
-                @endphp
-                <img class="profile-img" src="{{ asset($profileImagePath) }}" alt="Profile Picture">
-                <button onclick="openModal()" class="upload-button">Upload</button>
+    <main class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary card-header-custom d-flex align-items-center">
+                <h2 class="mb-0 text-white"><i class="fas fa-user text-white"></i> Profile Information</h2>
             </div>
-            <!-- Information Column -->
-            <div class="info-section" >
-
-            <div class="profile-field" id="field-landlord_name">
-    <span class="profile-label">Name:</span>
-    <span class="profile-value" id="value-landlord_name">{{ $landlord->landlord_name }}</span>
-    <input type="text" class="profile-input" id="input-landlord_name" value="{{ $landlord->landlord_name }}" style="display:none;">
-    <div class="button-container">
-        {{-- <button onclick="enableEdit('landlord_name')" class="edit-button" id="edit-button-landlord_name">Edit</button> --}}
-        <button onclick="save('landlord_name')" class="save-button" style="display:none;">Save</button>
-        <button onclick="cancel('landlord_name')" class="cancel-button" style="display:none;">Cancel</button>
-    </div>
-</div>
-
-
-<div class="profile-field" id="field-email">
-    <span class="profile-label">Email:</span>
-    <span class="profile-value" id="value-email">{{ $landlord->email }}</span>
-    <input type="text" class="profile-input" id="input-email" value="{{ $landlord->email }}" style="display:none;">
-    <div class="button-container">
-        {{-- <button onclick="enableEdit('email')" class="edit-button" id="edit-button-email">Edit</button> --}}
-        <button onclick="save('email')" class="save-button" style="display:none;">Save</button>
-        <button onclick="cancel('email')" class="cancel-button" style="display:none;">Cancel</button>
-    </div>
-</div>
-<div class="profile-field" id="field-contact_info">
-    <span class="profile-label">Contact:</span>
-    <span class="profile-value" id="value-contact_info">{{ $landlord->contact_info }}</span>
-    <input type="text" class="profile-input" id="input-contact_info" value="{{ $landlord->contact_info }}" style="display:none;">
-    <div class="button-container">
-        <button onclick="enableEdit('contact_info')" class="edit-button" id="edit-button-contact_info">Edit</button>
-        <button onclick="save('contact_info')" class="save-button" style="display:none;">Save</button>
-        <button onclick="cancel('contact_info')" class="cancel-button" style="display:none;">Cancel</button>
-    </div>
-</div>
-        </div>
-
-        
-<!-- Modal for Uploading Profile Picture -->
-<div id="uploadModal" style="display:none; position:fixed; z-index:1000; left:0; top:0; width:100%; height:100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
-        <div style="background: white; padding: 20px; border-radius: 10px; width: 50%; display: flex; flex-direction: column; align-items: center;">
-            <h2>Upload Profile Picture</h2>
-            <img id="imagePreview" src="{{ asset('assets/img/Default-icon.png') }}" alt="Profile Preview" style="width: 512px; height: 512px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
-            <form action="{{ route('profile.upload') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="profile_picture" id="profile_picture" onchange="previewImage();" required style="margin-bottom: 20px;">
-                <div class="button-container">
-                    <button type="submit" class="upload-button .upload-Profile-button">Upload</button>
-                    <button type="button" onclick="closeModal()" class="close-button">Close</button>
+            <div class="card-body card-body-custom">
+                <div class="row">
+                    <!-- Profile Picture Column -->
+                    <div class="col-md-5 d-flex flex-column align-items-center bg-light p-5 rounded-left">
+                        @php
+                            $profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile_picture : 'assets/img/Default-icon.png';
+                        @endphp
+                        <img class="rounded-circle mb-4" src="{{ asset($profileImagePath) }}" id="currentProfilePic"
+                            alt="Profile Picture" style="width: 225px; height: 225px; object-fit: cover;">
+                        <button onclick="openModal('{{ asset($profileImagePath) }}')"
+                            class="btn btn-primary">Upload</button>
+                    </div>
+                    <!-- Information Column -->
+                    <div class="col-md-7 p-5 rounded-right d-flex flex-column justify-content-center info-text">
+                        <form id="form-landlord_name" action="{{ route('profile.update') }}" method="POST">
+                            @csrf
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Name:</label>
+                                <div class="col-sm-5">
+                                    <span id="value-landlord_name"
+                                        class="form-control-plaintext">{{ $landlord->landlord_name }}</span>
+                                    <input type="text" name="value" id="input-landlord_name"
+                                        class="form-control profile-input" value="{{ $landlord->landlord_name }}">
+                                    <input type="hidden" name="field" value="landlord_name">
+                                </div>
+                                <div class="col-sm-3 text-right">
+                                    <div id="buttons-landlord_name" class="button-container">
+                                        <button type="submit" id="save-button-landlord_name"
+                                            class="btn btn-save btn-space">Save</button>
+                                        <button type="button" onclick="cancel('landlord_name')"
+                                            id="cancel-button-landlord_name" class="btn btn-cancel">Cancel</button>
+                                    </div>
+                                    <button type="button" onclick="enableEdit('landlord_name')"
+                                        id="edit-button-landlord_name" class="btn btn-edit btn-space">Edit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <form id="form-email" action="{{ route('profile.update') }}" method="POST">
+                            @csrf
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Email:</label>
+                                <div class="col-sm-5">
+                                    <span id="value-email" class="form-control-plaintext">{{ $landlord->email }}</span>
+                                    <input type="text" name="value" id="input-email" class="form-control profile-input"
+                                        value="{{ $landlord->email }}">
+                                    <input type="hidden" name="field" value="email">
+                                </div>
+                                <div class="col-sm-3 text-right">
+                                    <div id="buttons-email" class="button-container">
+                                        <button type="submit" id="save-button-email"
+                                            class="btn btn-save btn-space">Save</button>
+                                        <button type="button" onclick="cancel('email')" id="cancel-button-email"
+                                            class="btn btn-cancel">Cancel</button>
+                                    </div>
+                                    <button type="button" onclick="enableEdit('email')" id="edit-button-email"
+                                        class="btn btn-edit btn-space">Edit</button>
+                                </div>
+                            </div>
+                        </form>
+                        <form id="form-contact_info" action="{{ route('profile.update') }}" method="POST">
+                            @csrf
+                            <div class="mb-4 row align-items-center">
+                                <label class="col-sm-3 col-form-label font-weight-bold">Contact:</label>
+                                <div class="col-sm-5">
+                                    <span id="value-contact_info"
+                                        class="form-control-plaintext">{{ $landlord->contact_info }}</span>
+                                    <input type="text" name="value" id="input-contact_info"
+                                        class="form-control profile-input" value="{{ $landlord->contact_info }}">
+                                    <input type="hidden" name="field" value="contact_info">
+                                </div>
+                                <div class="col-sm-3 text-right">
+                                    <div id="buttons-contact_info" class="button-container">
+                                        <button type="submit" id="save-button-contact_info"
+                                            class="btn btn-save btn-space">Save</button>
+                                        <button type="button" onclick="cancel('contact_info')"
+                                            id="cancel-button-contact_info" class="btn btn-cancel">Cancel</button>
+                                    </div>
+                                    <button type="button" onclick="enableEdit('contact_info')"
+                                        id="edit-button-contact_info" class="btn btn-edit btn-space">Edit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-    <!-- Modal End -->
-</main>
 
-<script>
-    function openModal() {
-        document.getElementById('uploadModal').style.display = 'flex';
-    }
+        <!-- Modal for Uploading Profile Picture -->
+        <div id="uploadModal" class="modal fade" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="uploadModalLabel">Upload Profile Picture</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img id="imagePreview" class="rounded-circle mb-3"
+                            src="{{ asset('assets/img/Default-icon.png') }}" alt="Profile Preview"
+                            style="width: 200px; height: 200px; object-fit: cover;">
+                        <form id="profilePicForm" action="{{ route('profile.upload') }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="form-group">
+                                <input type="file" name="profile_picture" id="profile_picture" class="form-control-file"
+                                    onchange="previewImage();" required>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary mr-2">Upload</button>
+                                <button type="button" class="btn btn-danger"
+                                    onclick="submitRemoveProfilePictureForm()">Remove</button>
+                            </div>
+                        </form>
+                        <form id="removeProfilePicForm" action="{{ route('profile.remove') }}" method="POST"
+                            style="display:none;">
+                            @csrf
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-    function closeModal() {
-        document.getElementById('uploadModal').style.display = 'none';
-    }
-
-    function previewImage() {
-        var file = document.getElementById('profile_picture').files;
-        if (file.length > 0) {
-            var fileReader = new FileReader();
-
-            fileReader.onload = function(event) {
-                document.getElementById('imagePreview').setAttribute('src', event.target.result);
-            };
-
-            fileReader.readAsDataURL(file[0]);
+    <script>
+        if (typeof jQuery !== 'undefined') {
+            console.log('jQuery is loaded!');
         } else {
-            // If no file is selected, revert to the default image
-            document.getElementById('imagePreview').setAttribute('src', '{{ asset('assets/img/Default-icon.png') }}');
+            console.log('jQuery is not loaded!');
         }
-    }
 
-    function enableEdit(field) {
-    document.getElementById('value-' + field).style.display = 'none';
-    document.getElementById('input-' + field).style.display = 'inline-block';
-    document.getElementById('edit-button-' + field).style.display = 'none';
-    showButtons(field, true);
-}
+        function openModal(profilePicPath) {
+            document.getElementById('imagePreview').setAttribute('src', profilePicPath);
+            $('#uploadModal').modal('show');
+        }
 
-function save(field) {
-    var inputValue = document.getElementById('input-' + field).value;
-    console.log("Saving", field, inputValue); // Add this to check what is being sent
+        function closeModal() {
+            $('#uploadModal').modal('hide');
+        }
 
-    $.ajax({
-        url: '/profile/update',
-        type: 'POST',
-        data: {
-            field: field,
-            value: inputValue,
-            _token: '{{ csrf_token() }}'
-        },
-        success: function(response) {
-            console.log("Response", response); // Check server response
-            // Update the UI
-            document.getElementById('value-' + field).textContent = inputValue;
-            document.getElementById('value-' + field).style.display = 'inline';
+        function previewImage() {
+            var file = document.getElementById('profile_picture').files;
+            if (file.length > 0) {
+                var fileReader = new FileReader();
+
+                fileReader.onload = function (event) {
+                    document.getElementById('imagePreview').setAttribute('src', event.target.result);
+                };
+
+                fileReader.readAsDataURL(file[0]);
+            } else {
+                document.getElementById('imagePreview').setAttribute('src', '{{ asset('assets/img/Default-icon.png') }}');
+            }
+        }
+
+        function enableEdit(field) {
+            document.getElementById('value-' + field).style.display = 'none';
+            document.getElementById('input-' + field).style.display = 'block';
+            document.getElementById('edit-button-' + field).style.display = 'none';
+
+            document.getElementById('buttons-' + field).classList.add('active');
+        }
+
+        function cancel(field) {
             document.getElementById('input-' + field).style.display = 'none';
-            document.getElementById('edit-button-' + field).style.display = 'inline';
-            showButtons(field, false);
-        },
-        error: function(xhr, status, error) {
-            console.error("Save error", status, error);
-            alert('Error saving changes.');
+            document.getElementById('value-' + field).style.display = 'block';
+            document.getElementById('edit-button-' + field).style.display = 'inline-block';
+            document.getElementById('buttons-' + field).classList.remove('active');
         }
-    });
-}
 
-
-
-
-function cancel(field) {
-    document.getElementById('input-' + field).style.display = 'none';
-    document.getElementById('value-' + field).style.display = 'inline'; // Adjusted to match your setup
-    document.getElementById('edit-button-' + field).style.display = 'inline';
-    showButtons(field, false);
-}
-
-function showButtons(field, show) {
-    var container = document.getElementById('field-' + field).getElementsByClassName('button-container')[0];
-    var buttons = container.querySelectorAll('button');
-    buttons.forEach(button => {
-        if (button.id !== 'edit-button-' + field) {
-            button.style.display = show ? 'inline' : 'none';
+        function submitRemoveProfilePictureForm() {
+            document.getElementById('removeProfilePicForm').submit();
         }
-    });
-}
-</script>
-
-@endsection
+    </script>
+    @endsection
