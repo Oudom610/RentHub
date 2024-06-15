@@ -59,6 +59,12 @@
                                 </div>
                                 @enderror
                             </div>
+                            
+                            <div class="w-100"></div> <!-- Force next columns to new line -->
+
+                            <div class="col-md-12">
+                                <h3 class="fw-bold text-dark">Electricity</h3>
+                            </div>
 
                             <div class="form-group col-md-6">
                                 <label for="previous_electricity_meter_reading" class="fw-bold text-dark">Previous Electricity Meter Reading</label>
@@ -79,6 +85,22 @@
                                 </div>
                                 @enderror
                             </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="electricity_rate" class="fw-bold text-dark">Electricity Rate (Default: 0.375)</label>
+                                <input type="number" step="0.01" class="form-control @error('utilities.electricity.rate') is-invalid @enderror" id="electricity_rate" name="utilities[electricity][rate]" placeholder="Enter Electricity Rate">
+                                @error('utilities.electricity.rate')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="w-100"></div> <!-- Force next columns to new line -->
+
+                            <div class="col-md-12">
+                                <h3 class="fw-bold text-dark">Water</h3>
+                            </div>
 
                             <div class="form-group col-md-6">
                                 <label for="previous_water_meter_reading" class="fw-bold text-dark">Previous Water Meter Reading</label>
@@ -94,6 +116,16 @@
                                 <label for="current_water_meter_reading" class="fw-bold text-dark">Current Water Meter Reading</label>
                                 <input type="number" step="0.01" class="form-control @error('utilities.water.current_meter_reading') is-invalid @enderror" id="current_water_meter_reading" name="utilities[water][current_meter_reading]" placeholder="Enter Current Water Meter Reading" required>
                                 @error('utilities.water.current_meter_reading')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="water_rate" class="fw-bold text-dark">Water Rate (Default: 0.5)</label>
+                                <input type="number" step="0.01" class="form-control @error('utilities.water.rate') is-invalid @enderror" id="water_rate" name="utilities[water][rate]" placeholder="Enter Water Rate">
+                                @error('utilities.water.rate')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>

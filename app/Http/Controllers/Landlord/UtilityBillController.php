@@ -12,14 +12,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 
-
-
 class UtilityBillController extends Controller
 {
+    // Default utility rates
+    private $defaultUtilityRates = [
+        'electricity' => 0.375,
+        'water' => 0.5,
+    ];
+
     // Fetch Data
     public function index()
     {
-
         // Fetch utility payments based on their status
         $pendingPayments = Utility_bills::with('lease', 'tenant')->where('status', 'pending')->get();
         $approvedPayments = Utility_bills::with('lease', 'tenant')->where('status', 'approved')->get();
@@ -30,7 +33,6 @@ class UtilityBillController extends Controller
 
         return view('landlord.show-utility', compact('pendingPayments', 'approvedPayments', 'declinedPayments', 'landlord', 'tenants'));
     }
-
 
     public function create()
     {
@@ -51,11 +53,6 @@ class UtilityBillController extends Controller
     }
 
     // Store Function Start
-    private $utilityRates = [
-        'electricity' => 0.375,
-        'water' => 0.5,
-    ];
-
     public function store(Request $request)
     {
         // Validate the incoming request data
@@ -63,6 +60,8 @@ class UtilityBillController extends Controller
             'tenant_name' => 'required|exists:tenants,tenant_name',
             'billing_date' => 'required|date',
             'utilities' => 'required|array',
+            'utilities.electricity.rate' => 'nullable|numeric|min:0',
+            'utilities.water.rate' => 'nullable|numeric|min:0',
             'proof_of_meter_readings.*' => 'required|file|mimes:jpeg,jpg,png,pdf|max:2048',
             'proof_of_utility_payment' => 'nullable|string',
             'status' => 'nullable|in:pending,approved,declined',
@@ -76,7 +75,7 @@ class UtilityBillController extends Controller
         $tenant = Tenant::where('landlord_id', $landlord->id)
             ->where('tenant_name', $tenantName)
             ->firstOrFail();
-        $tenantId = $tenant->tenant_id; // Use 'tenant_id' instead of 'id'
+        $tenantId = $tenant->tenant_id;
 
         // Retrieve the active lease ID for the tenant
         $activeLease = $tenant->leases()
@@ -85,7 +84,6 @@ class UtilityBillController extends Controller
             ->first();
 
         if (!$activeLease) {
-            // Handle the case when there is no active lease for the selected tenant
             return redirect()->back()->withErrors(['error' => 'Active lease not found for the selected tenant.']);
         }
 
@@ -102,20 +100,22 @@ class UtilityBillController extends Controller
         $totalAmount = 0;
         $utilities = [];
         foreach ($request->utilities as $type => $utility) {
-            $amount = $this->calculateAmount($type, $utility['previous_meter_reading'], $utility['current_meter_reading']);
+            // Use custom rate if provided, otherwise use the default rate
+            $rate = $utility['rate'] ?? $this->defaultUtilityRates[$type];
+            $amount = $this->calculateAmount($type, $utility['previous_meter_reading'], $utility['current_meter_reading'], $rate);
             $totalAmount += $amount;
 
             $utilities[$type] = [
                 'previous_meter_reading' => $utility['previous_meter_reading'],
                 'current_meter_reading' => $utility['current_meter_reading'],
+                'rate' => $rate,
                 'amount' => $amount,
             ];
         }
 
-
         // Create the utility payment only if an active lease is found
         $utilityBill = Utility_bills::create([
-            'lease_id' => $activeLease->lease_id, // Use 'lease_id' instead of 'id'
+            'lease_id' => $activeLease->lease_id,
             'tenant_id' => $tenantId,
             'billing_date' => $request->billing_date,
             'utilities' => json_encode($utilities),
@@ -126,24 +126,16 @@ class UtilityBillController extends Controller
         ]);
 
         if (!$utilityBill) {
-            // Handle the case when rent payment creation fails
             return redirect()->back()->withErrors(['error' => 'Failed to create rent payment.']);
         }
 
         return redirect()->route('utility.create')->with('success', 'Utility bill added successfully.');
     }
-    private function calculateAmount($type, $previousMeterReading, $currentMeterReading)
-    {
-        // Ensure the utility type exists in the rates array
-        if (!array_key_exists($type, $this->utilityRates)) {
-            throw new \Exception("Invalid utility type: {$type}");
-        }
 
-        // Calculate the amount based on the difference in meter readings and the rate
-        $rate = $this->utilityRates[$type];
+    private function calculateAmount($type, $previousMeterReading, $currentMeterReading, $rate)
+    {
         $usage = $currentMeterReading - $previousMeterReading;
 
-        // Ensure usage is non-negative
         if ($usage < 0) {
             throw new \Exception("Invalid meter readings: previous reading is higher than current reading.");
         }
@@ -199,7 +191,4 @@ class UtilityBillController extends Controller
 
         return redirect()->back()->with('error', 'Failed to upload proof of payment.');
     }
-
-
-
 }
