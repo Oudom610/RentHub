@@ -212,7 +212,7 @@
                                                 @csrf
                                                 <div class="d-flex align-items-center justify-content-center">
                                                     <input type="file" name="proof_of_payment" accept="application/pdf, image/png, image/jpeg, image/jpg" required class="form-control-file" style="width: auto; max-width: 200px;">
-                                                    <button class="btn btn-primary btn-sm ml-2">
+                                                    <button class="btn btn-primary btn-sm ml-2" style="white-space: nowrap;">
                                                         <i class="fas fa-upload"></i> Upload
                                                     </button>
                                                 </div>

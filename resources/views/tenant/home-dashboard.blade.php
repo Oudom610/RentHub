@@ -34,6 +34,11 @@
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-exclamation-circle text-warning"></i> Declined Rent Payments</h5>
                             <p class="card-text display-4">{{ $declinedRentPayments->count() }}</p>
+                            @foreach ($declinedRentPayments as $payment)
+                                <div class="alert alert-danger mt-3">
+                                    <strong>Reason:</strong> {{ $payment->decline_remark }}
+                                </div>
+                            @endforeach
                             <a href="{{ route('tenant.showRent') }}" class="btn btn-warning" style="white-space: nowrap;"><i class="fas fa-upload"></i> Re-upload Proof of Payment</a>
                         </div>
                     </div>
@@ -54,6 +59,11 @@
                         <div class="card-body">
                             <h5 class="card-title"><i class="fas fa-exclamation-circle text-danger"></i> Declined Utility Bills</h5>
                             <p class="card-text display-4">{{ $declinedUtilityPayments->count() }}</p>
+                            @foreach ($declinedUtilityPayments as $payment)
+                                <div class="alert alert-danger mt-3">
+                                    <strong>Reason:</strong> {{ $payment->decline_remark }}
+                                </div>
+                            @endforeach
                             <a href="{{ route('tenant.showUtility') }}" class="btn btn-danger" style="white-space: nowrap;"><i class="fas fa-upload"></i> Re-upload Proof of Payment</a>
                         </div>
                     </div>

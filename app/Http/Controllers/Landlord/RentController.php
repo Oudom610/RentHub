@@ -101,19 +101,41 @@ class RentController extends Controller
         return redirect()->route('rent.create')->with('success', 'Rent payment added successfully.');
     }
 
+    // public function updateStatus(Request $request, RentPayment $rentPayment)
+    // {
+    //     // Validate the request data
+    //     $request->validate([
+    //         'status' => 'required|in:pending,approved,declined',
+    //     ]);
+
+    //     // Update the status
+    //     $rentPayment->status = $request->status;
+    //     $rentPayment->save();
+
+    //     return redirect()->route('rent.index')->with('success', 'Rent payment status updated successfully.');
+    // }
+
     public function updateStatus(Request $request, RentPayment $rentPayment)
-    {
-        // Validate the request data
-        $request->validate([
-            'status' => 'required|in:pending,approved,declined',
-        ]);
+{
+    $request->validate([
+        'status' => 'required|string|in:pending,approved,declined',
+        'decline_remark' => 'nullable|string|max:100',
+    ]);
 
-        // Update the status
-        $rentPayment->status = $request->status;
-        $rentPayment->save();
+    $rentPayment->status = $request->status;
 
-        return redirect()->route('rent.index')->with('success', 'Rent payment status updated successfully.');
+    if ($request->status == 'declined') {
+        $rentPayment->decline_remark = $request->decline_remark;
+    } else {
+        $rentPayment->decline_remark = null;
     }
+
+    $rentPayment->save();
+
+    return redirect()->route('rent.index')->with('success', 'Rent payment status updated successfully!');
+}
+
+
 
     // public function destroy(RentPayment $rentPayment)
     // {

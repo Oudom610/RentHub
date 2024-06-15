@@ -56,6 +56,9 @@
                                                     <option value="approved" {{ $payment->status == 'approved' ? 'selected' : '' }}>Approved</option>
                                                     <option value="declined" {{ $payment->status == 'declined' ? 'selected' : '' }}>Declined</option>
                                                 </select>
+                                                <div class="mt-2">
+                                                    <textarea name="decline_remark" class="form-control" placeholder="Enter remark if declining">{{ $payment->decline_remark }}</textarea>
+                                                </div>
                                                 <button type="submit" class="btn btn-primary btn-sm mt-2" style="white-space: nowrap;"><i class="fas fa-check"></i> Update Status</button>
                                             </form>
                                         </td>

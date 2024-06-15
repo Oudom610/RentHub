@@ -145,19 +145,40 @@ class UtilityBillController extends Controller
     // Store Function End
 
     // Update Status
+    // public function updateStatus(Request $request, Utility_bills $utility_billsPayment)
+    // {
+    //     // Validate the request data
+    //     $request->validate([
+    //         'status' => 'required|in:pending,approved,declined',
+    //     ]);
+
+    //     // Update the status
+    //     $utility_billsPayment->status = $request->status;
+    //     $utility_billsPayment->save();
+
+    //     return redirect()->route('utility.index')->with('success', 'Utility payment status updated successfully.');
+    // }
+
     public function updateStatus(Request $request, Utility_bills $utility_billsPayment)
-    {
-        // Validate the request data
-        $request->validate([
-            'status' => 'required|in:pending,approved,declined',
-        ]);
+{
+    $request->validate([
+        'status' => 'required|string|in:pending,approved,declined',
+        'decline_remark' => 'nullable|string|max:100',
+    ]);
 
-        // Update the status
-        $utility_billsPayment->status = $request->status;
-        $utility_billsPayment->save();
+    $utility_billsPayment->status = $request->status;
 
-        return redirect()->route('utility.index')->with('success', 'Utility payment status updated successfully.');
+    if ($request->status == 'declined') {
+        $utility_billsPayment->decline_remark = $request->decline_remark;
+    } else {
+        $utility_billsPayment->decline_remark = null;
     }
+
+    $utility_billsPayment->save();
+
+    return redirect()->route('utility.index')->with('success', 'Utility bill status updated successfully!');
+}
+
 
     // Tenant
     public function showUtility()
