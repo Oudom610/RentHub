@@ -54,15 +54,14 @@
                         @endforelse
                     </tbody>
                 </table>
+                <!-- Pagination Links -->
+                <div class="d-flex justify-content-end">
+                    {{ $tenants->links() }}
+                </div>
             </div>
         </div>
         </div>
 
-
-        <!-- Pagination Links -->
-        <div class="mt-4">
-            {{ $tenants->links() }}
-        </div>
         
         <script>
             // Hide the flash message after 2 seconds
