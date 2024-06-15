@@ -28,7 +28,7 @@ class LandlordRegistrationController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'contact_info' => $request->contact_info,
-            'profile_picture' => 'default-profile-picture.jpg' 
+            'profile_picture' => 'default/Default-icon.png'
         ]);
 
         return redirect()->route('login-landlord')->with('success', 'Registration successful. Please log in.');

@@ -103,7 +103,7 @@ class ProfileController extends Controller
             Storage::delete('public/' . $landlord->profile_picture);
 
             // Remove the profile picture from the database
-            $landlord->profile_picture = null;
+            $landlord->profile_picture = 'default/Default-icon.png';
             $landlord->save();
         }
 

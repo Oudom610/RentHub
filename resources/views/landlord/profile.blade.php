@@ -94,7 +94,7 @@
                     <!-- Profile Picture Column -->
                     <div class="col-md-5 d-flex flex-column align-items-center bg-light p-5 rounded-left">
                         @php
-                            $profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile_picture : 'assets/img/Default-icon.png';
+                            $profileImagePath = $landlord->profile_picture ? 'storage/' . $landlord->profile_picture : 'default/Default-icon.png';
                         @endphp
                         <img class="rounded-circle mb-4" src="{{ asset($profileImagePath) }}" id="currentProfilePic"
                             alt="Profile Picture" style="width: 225px; height: 225px; object-fit: cover;">
@@ -188,7 +188,7 @@
                     </div>
                     <div class="modal-body">
                         <img id="imagePreview" class="rounded-circle mb-3"
-                            src="{{ asset('assets/img/Default-icon.png') }}" alt="Profile Preview"
+                            src="{{ asset('storage/default/Default-icon.png') }}" alt="Profile Preview"
                             style="width: 200px; height: 200px; object-fit: cover;">
                         <form id="profilePicForm" action="{{ route('profile.upload') }}" method="POST"
                             enctype="multipart/form-data">
@@ -240,7 +240,7 @@
 
                 fileReader.readAsDataURL(file[0]);
             } else {
-                document.getElementById('imagePreview').setAttribute('src', '{{ asset('assets/img/Default-icon.png') }}');
+                document.getElementById('imagePreview').setAttribute('src', '{{ asset('storage/default/Default-icon.png') }}');
             }
         }
 

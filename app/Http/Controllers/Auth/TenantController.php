@@ -36,7 +36,7 @@ class TenantController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'contact_info' => $request->contact_info,
-            'profile_picture' => 'default-profile-picture.jpg' // Assuming a default picture
+            'profile_picture' => 'default/Default-icon.png'
         ]);
 
         $tenant->save();
@@ -45,15 +45,16 @@ class TenantController extends Controller
     }
 
     // Show all
-    public function showAllTenant() {
+    public function showAllTenant()
+    {
         // Get the current landlord using the Auth facade or other authentication mechanism
         $landlord = Auth::guard('landlord')->user(); // Adjust as needed based on your setup
         // $landlord = Landlord::first();
         if ($landlord) {
             // Fetch tenants where landlord_id matches the current landlord's ID
             $tenants = Tenant::where('landlord_id', $landlord->id) // Get tenants of the current landlord
-                             ->latest() // Optional: sort by latest
-                             ->paginate(10); // Paginate with 10 items per page
+                ->latest() // Optional: sort by latest
+                ->paginate(10); // Paginate with 10 items per page
 
             // Pass data to the view
             return view('landlord.show-tenant', [
@@ -85,7 +86,7 @@ class TenantController extends Controller
         $tenant->tenant_name = $request->tenant_name;
         $tenant->email = $request->email;
         $tenant->contact_info = $request->contact_info;
-       
+
         $tenant->save();
 
         return redirect()->route('tenant.show')->with('success', 'Tenant updated successfully!');
@@ -93,15 +94,16 @@ class TenantController extends Controller
 
 
     // Destroy
-    public function destroy($tenant_id) {
+    public function destroy($tenant_id)
+    {
         $landlord = Auth::guard('landlord')->user();
-    
+
         if ($landlord) {
             // Find the tenant by ID and check if they belong to the current landlord
             $tenant = Tenant::where('landlord_id', $landlord->id)
-                            ->where('tenant_id', $tenant_id) // Adjust the key to match your model
-                            ->first();
-    
+                ->where('tenant_id', $tenant_id) // Adjust the key to match your model
+                ->first();
+
             if ($tenant) {
                 $tenant->delete();
                 session()->flash('success', 'Tenant deleted successfully.');

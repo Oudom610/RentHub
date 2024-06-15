@@ -120,7 +120,7 @@ class TenantProfileController extends Controller
 
         if ($tenant->profile_picture) {
             Storage::delete('public/' . $tenant->profile_picture);
-            $tenant->profile_picture = null;
+            $tenant->profile_picture = 'default/Default-icon.png';
             $tenant->save();
         }
 
