@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -15,23 +16,12 @@ class ProfileController extends Controller
         $this->middleware('auth:landlord'); // Ensure the correct guard is used for this controller
     }
 
-    /**
-     * Show the form for editing the logged-in landlord's profile.
-     *
-     * @return \Illuminate\View\View
-     */
     public function show()
     {
         $landlord = Auth::guard('landlord')->user(); // Fetch the currently authenticated landlord
         return view('landlord.profile', compact('landlord'));
     }
 
-    /**
-     * Handle the uploading of the profile picture.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function upload(Request $request)
     {
         $request->validate([
@@ -61,48 +51,63 @@ class ProfileController extends Controller
         if (isset($landlord->{$field})) {
             $landlord->{$field} = $value;
             $landlord->save();
-            return response()->json(['success' => true, 'message' => 'Profile updated successfully!']);
+            return redirect()->route('profile.show')->with('success', 'Profile updated successfully!');
         }
 
-        return response()->json(['success' => false, 'message' => 'Invalid field specified.']);
+        return redirect()->route('profile.show')->with('error', 'Invalid field specified.');
     }
 
+
     // Change Password
-    public function showChangePasswordForm() {
+    public function showChangePasswordForm()
+    {
         $landlord = Auth::guard('landlord')->user();
-        // Return the view for changing password
         return view('landlord.change-password', compact('landlord'));
     }
-    
-    public function changePassword(Request $request) {
+
+    public function changePassword(Request $request)
+    {
         $landlord = Auth::guard('landlord')->user();
-        
-        // Define validation rules
+
         $rules = [
             'old_password' => 'required',
             'new_password' => 'required|min:5|confirmed', // Password confirmation must match
         ];
-        
-        // Validate the request
+
         $validator = Validator::make($request->all(), $rules);
-    
+
         if ($validator->fails()) {
-            // If validation fails, return with errors
             return redirect()->back()->withErrors($validator)->withInput();
         }
-    
-        // Check if the old password matches the current one
+
         if (!Hash::check($request->input('old_password'), $landlord->password)) {
             return redirect()->back()->withErrors(['old_password' => 'The old password is incorrect'])->withInput();
         }
-    
-        // If all validations pass, update the password
+
         $landlord->password = Hash::make($request->input('new_password'));
         $landlord->save();
-    
+
         session()->flash('success', 'Password changed successfully.');
-    
-        return redirect()->route('profile.show'); // Redirect to a safe location after changing password
+
+        return redirect()->route('profile.show');
+    }
+
+    public function removeProfilePicture(Request $request)
+    {
+        // Retrieve the authenticated user
+        $landlord = Auth::guard('landlord')->user();
+
+        // Check if the user has a profile picture
+        if ($landlord->profile_picture) {
+            // Delete the profile picture from storage
+            Storage::delete('public/' . $landlord->profile_picture);
+
+            // Remove the profile picture from the database
+            $landlord->profile_picture = null;
+            $landlord->save();
+        }
+
+        return redirect()->back()->with('success', 'Profile picture removed.');
     }
 
 }

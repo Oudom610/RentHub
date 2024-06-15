@@ -46,7 +46,7 @@ Route::middleware(['tenant.auth'])->group(function () {
     Route::get('/tenant/profile', [TenantProfileController::class, 'show'])->name('tenant.profile');
     Route::post('/tenant/profile/upload', [TenantProfileController::class, 'upload'])->name('tenant.profile.upload');
     Route::post('/tenant/profile/update', [TenantProfileController::class, 'updateField'])->name('tenant.profile.update');
-
+    Route::post('/tenant/profile/remove', [TenantProfileController::class, 'removeProfilePicture'])->name('tenant.profile.remove');
     // Update Password
     Route::get('/tenant/change-password', [TenantProfileController::class, 'showChangePasswordForm'])->name('tenant.change-password');
     Route::post('/tenant/change-password', [TenantProfileController::class, 'changePassword'])->name('tenant.change-password.update');
@@ -87,7 +87,7 @@ Route::middleware(['landlord.auth'])->group(function () {
     Route::get('/landlord/profile', [ProfileController::class, 'show'])->name('profile.show');
     // Route for uploading profile picture
     Route::post('/profile/upload', [ProfileController::class, 'upload'])->name('profile.upload');
-
+    Route::post('/profile/remove', [ProfileController::class, 'removeProfilePicture'])->name('profile.remove');
     Route::post('/profile/update', [ProfileController::class, 'updateField'])->name('profile.update');
 
     // New route for showing all tenants, under the 'landlord.auth' middleware

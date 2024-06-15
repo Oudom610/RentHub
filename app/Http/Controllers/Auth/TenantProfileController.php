@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 
 class TenantProfileController extends Controller
 {
@@ -73,21 +74,23 @@ class TenantProfileController extends Controller
     }
 
     // Change Password
-    public function showChangePasswordForm() {
+    public function showChangePasswordForm()
+    {
         $tenant = Auth::guard('tenants')->user();
         // Return the view for changing password
         return view('tenant.change-password', compact('tenant'));
     }
 
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         $tenant = Auth::guard('tenants')->user(); // Ensure the correct guard is used
-        
+
         // Define validation rules
         $rules = [
             'old_password' => 'required',
             'new_password' => 'required|min:5|confirmed', // The new password and confirmation must match
         ];
-        
+
         // Validate the request
         $validator = Validator::make($request->all(), $rules);
 
@@ -110,5 +113,18 @@ class TenantProfileController extends Controller
         return redirect()->route('tenant.profile'); // Redirect to a safe location after changing the password
     }
 
+
+    public function removeProfilePicture(Request $request)
+    {
+        $tenant = Auth::guard('tenants')->user();
+
+        if ($tenant->profile_picture) {
+            Storage::delete('public/' . $tenant->profile_picture);
+            $tenant->profile_picture = null;
+            $tenant->save();
+        }
+
+        return redirect()->back()->with('success', 'Profile picture removed.');
+    }
 
 }
